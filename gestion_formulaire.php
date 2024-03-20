@@ -31,7 +31,7 @@ $formMessage = [
     "minLength" => "Ce champs doit avoir au plus %0% caractères",
     "maxLength" => "Ce champs doit avoir au moins %0% caractères",
     "envoi_echec" => "Le formulaire n'a pas été envoyé",
-    "envoi_succes" => "Le formulaire a bien été envoyé",
+    "envoi_succes" => "Le formulaire a bien été envoyé"
 ];
 
 
@@ -40,12 +40,13 @@ foreach ($champsConfig as $nomChamps => $regles) {
 
     if (($_SERVER["REQUEST_METHOD"] === "POST")) {
 
-        $lastName = htmlentities($_POST["user_lastname"]);
-        if (empty($lastName)) {
+        $lastName = trim(htmlentities($_POST["user_lastname"]));
+        $valeursEchappees['user_lastname'] = $lastName;
+
+        if ((empty($lastName)) && ($champsConfig["user_lastname"]["requis"])) {
             $errors['user_lastname'] = $formMessage["requis"];
-        } else {
-            $valeursEchappees['user_lastname'] = "user_lastname";
         }
+
         // $firstName = htmlentities($_POST["user_firstname"]);
         // if (((strlen($firstName) < 2)) && (!empty($firstName))) {
         //     $errors['user_firstname'] =  "Le champ 'Prénom' est trop petit";
