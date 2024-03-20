@@ -1,0 +1,127 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Manrope';
+    background-color:#E6EFFA
+}
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgb(255, 255, 255);
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    height: 40px;
+}
+nav ul li {
+    display: inline-block;
+    padding: 10px;
+    margin-right: 20px;
+}
+nav ul:first-child li:first-child {
+    color: black;
+    font-size: 2em;
+    font-weight: bold;
+}
+nav ul:first-child li:first-child span {
+    background-color: #323E6E;
+    border-radius: 10px;
+    color: white;
+    font-size: 1em;
+    font-weight: bold;
+    padding: 3px;
+}
+nav a {
+    text-decoration: none;
+    font-size: 1.5em;
+    color: black;
+}
+form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+form fieldset {
+    margin-top: 2%;
+    padding: 1%;
+    text-align: center;
+    background-color: #FBFCFE;
+    border: 3px solid #FBFCFE;
+    border-radius: 10px;
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    justify-content:center;
+}
+form fieldset p {
+    font-weight: bold;
+}
+form fieldset p label {
+    text-align: left;
+    width : 80%;
+    display : inline-block;
+}
+form fieldset p:nth-child(5) label {
+    margin-bottom: 1%;
+}
+fieldset legend {
+    border-radius: 10px;
+    padding: 5px;
+    background-color:#323E6E;
+    font-size: 2em;
+    color: white;
+    font-weight: bold;
+}
+p input {
+    height: 20px;
+    width: 80%;
+    border-radius: 5px;
+    border: none;
+    background-color: #E6EFFA;
+}
+p textarea {
+    border-radius: 5px;
+    width: 80%;
+    height: 100px;
+    resize: none;
+    border: none;
+    background-color:#E6EFFA ;
+}
+p button[type='submit'] {
+    border: none;
+    border-radius: 10px;
+    padding: 2%;
+    background-color:#F8883C;
+    font-size: 1em;
+    font-weight: bold;
+    color: white;
+}
+
+p button:hover {
+    background-color: #E67E22;
+}
+nav a:hover {
+    border-bottom: solid 3px #323E6E;
+}
+nav a:focus {
+    border-bottom: solid 3px #323E6E;
+}
+/* .enSavoirPlus
+{
+    overflow: hidden;
+    display: inline-block;
+    max-height: 10px;
+    transition: max-height ease-out 0.5s;
+}
+.derouler
+{
+    max-height: 600px;
+} */
+.active {
+    border-bottom: solid 3px #323E6E;
+}
+
+
+
