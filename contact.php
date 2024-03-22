@@ -20,7 +20,7 @@ require_once 'gestion_formulaire.php';
         </p>
         <p>
             <label for="mail">E-mail&nbsp;:</label><br>
-            <input type="email" id="mail" name="user_mail" value="<?= (isset($Mail) ? $Mail : "") ?>" /><br>
+            <input type="email" id="mail" name="user_mail" value="<?= (isset($mail) ? $mail : "") ?>" /><br>
             <?= ((isset($errors['user_mail']) ? $errors['user_mail'] : "")) ?>
         </p>
         <p>

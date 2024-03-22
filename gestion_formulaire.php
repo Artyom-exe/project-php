@@ -10,6 +10,7 @@ $champsConfig = [
         'maxLength' => 255
     ],
     'user_firstname' => [
+        'requis' => false,
         'minLength' => 2,
         'maxLength' => 255
     ],
@@ -45,31 +46,47 @@ foreach ($champsConfig as $nomChamps => $regles) {
 
         if ((empty($lastName)) && ($champsConfig["user_lastname"]["requis"])) {
             $errors['user_lastname'] = $formMessage["requis"];
+        } elseif (strlen($lastName) < $champsConfig["user_lastname"]["minLength"]) {
+            $errors['user_lastname'] = $formMessage["maxLength"];
+        } elseif (strlen($lastName) > $champsConfig["user_lastname"]["maxLength"]) {
+            $errors['user_lastname'] = $formMessage["minLength"];
         }
 
-        // $firstName = htmlentities($_POST["user_firstname"]);
-        // if (((strlen($firstName) < 2)) && (!empty($firstName))) {
-        //     $errors['user_firstname'] =  "Le champ 'Prénom' est trop petit";
-        // } elseif ((strlen($firstName) > 255)) {
-        //     $errors['user_firstname'] =  "Le champ 'Prénom' est trop grand";
-        // }
-        // $Mail = htmlentities($_POST["user_mail"]);
-        // if (empty($Mail) || !filter_var($Mail, FILTER_VALIDATE_EMAIL)) {
-        //     $errors['user_mail'] =  "Le champ 'Mail' est invalide";
-        // }
-        // $message = htmlentities($_POST["user_message"]);
-        // if (empty($message)) {
-        //     $errors['user_message'] =  "Le champ 'Message' est vide";
-        // } elseif ((strlen($firstName) < 10) && (!empty($firstName))) {
-        //     $errors['user_message'] =  "Le champ 'Message' est trop petit";
-        // } elseif (strlen($firstName) > 300) {
-        //     $errors['user_message'] =  "Le champ 'Message' est trop grand";
-        // }
+        $firstName = trim(htmlentities($_POST["user_firstname"]));
+        $valeursEchappees['user_firstname'] = $firstName;
 
-        // if (empty($errors)) {
-        //     echo "<div style= 'text-align: center; font-size: 1.2em; color: green; font-weight: bold; margin: 10px;'>Formulaire soumis avec succès !</div>";
-        // } else {
-        //     echo "<div style= 'text-align: center; font-size: 1.2em; color: red; font-weight: bold; margin: 10px;'>Le formulaire n'a pas été envoyé !</div>";
-        // }
+        if ((empty($firstName)) && ($champsConfig["user_firstname"]["requis"])) {
+            $errors['user_firstname'] = $formMessage["requis"];
+        } elseif (strlen($firstName) < $champsConfig["user_firstname"]["minLength"]) {
+            $errors['user_firstname'] = $formMessage["maxLength"];
+        } elseif (strlen($firstName) > $champsConfig["user_firstname"]["maxLength"]) {
+            $errors['user_firstname'] = $formMessage["minLength"];
+        }
+
+        $mail = htmlentities($_POST["user_mail"]);
+        $valeursEchappees['user_mail'] = $mail;
+
+        if (empty($mail)) {
+            $errors['user_mail'] = $formMessage["requis"];
+        } elseif (!filter_var($mail, FILTER_VALIDATE_EMAIL)) {
+            $errors['user_mail'] = $formMessage["email"];
+        }
+
+        $message = trim(htmlentities($_POST["user_message"]));
+        $valeursEchappees['user_message'] = $message;
+
+        if ((empty($message)) && ($champsConfig["user_message"]["requis"])) {
+            $errors['user_message'] = $formMessage["requis"];
+        } elseif (strlen($message) < $champsConfig["user_message"]["minLength"]) {
+            $errors['user_message'] = $formMessage["maxLength"];
+        } elseif (strlen($message) > $champsConfig["user_message"]["maxLength"]) {
+            $errors['user_message'] = $formMessage["minLength"];
+        }
     }
+}
+
+if (empty($errors)) {
+    echo "<div style= 'text-align: center; font-size: 1.2em; color: green; font-weight: bold; margin: 10px;'> " . $formMessage["envoi_succes"] . "</div>";
+} else {
+    echo "<div style= 'text-align: center; font-size: 1.2em; color: red; font-weight: bold; margin: 10px;'> " . $formMessage["envoi_echec"] . "</div>";
 };
