@@ -35,11 +35,9 @@ $formMessage = [
     "envoi_succes" => "Le formulaire a bien été envoyé"
 ];
 
+if (($_SERVER["REQUEST_METHOD"] === "POST")) {
 
-foreach ($champsConfig as $nomChamps => $regles) {
-
-
-    if (($_SERVER["REQUEST_METHOD"] === "POST")) {
+    foreach ($champsConfig as $nomChamps => $regles) {
 
         $lastName = trim(htmlentities($_POST["user_lastname"]));
         $valeursEchappees['user_lastname'] = $lastName;
@@ -63,7 +61,7 @@ foreach ($champsConfig as $nomChamps => $regles) {
             $errors['user_firstname'] = $formMessage["minLength"];
         }
 
-        $mail = htmlentities($_POST["user_mail"]);
+        $mail = trim(htmlentities($_POST["user_mail"]));
         $valeursEchappees['user_mail'] = $mail;
 
         if (empty($mail)) {
@@ -83,10 +81,26 @@ foreach ($champsConfig as $nomChamps => $regles) {
             $errors['user_message'] = $formMessage["minLength"];
         }
     }
+
+    if (empty($errors)) {
+        envoie_mail($valeursEchappees);
+        $valeursEchappees = [];
+        echo "<div style= 'text-align: center; font-size: 1.2em; color: green; font-weight: bold; margin: 10px;'> " . $formMessage["envoi_succes"] . "</div>";
+    } else {
+        echo "<div style= 'text-align: center; font-size: 1.2em; color: red; font-weight: bold; margin: 10px;'> " . $formMessage["envoi_echec"] . "</div>";
+    }
 }
 
-if (empty($errors)) {
-    echo "<div style= 'text-align: center; font-size: 1.2em; color: green; font-weight: bold; margin: 10px;'> " . $formMessage["envoi_succes"] . "</div>";
-} else {
-    echo "<div style= 'text-align: center; font-size: 1.2em; color: red; font-weight: bold; margin: 10px;'> " . $formMessage["envoi_echec"] . "</div>";
+function envoie_mail($valeursEchappees)
+{
+
+    $destinataire = "th.lambot@hotmail.fr";
+    $sujet = "Formulaire";
+    $message = implode("\r\n", $valeursEchappees);
+
+    if (mail($destinataire, $sujet, $message)) {
+        echo "Le courriel a été envoyé avec succès.";
+    } else {
+        echo "L'envoi du courriel a échoué.";
+    }
 };
