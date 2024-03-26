@@ -1,22 +1,22 @@
 <?php
 $metaDescription = "Inscription";
 $pageTitre = "Inscription";
-require_once 'header.php';
-require_once 'gestion_connexion.php';
+require_once 'includes/header.php';
+require_once 'gestions/gestion_connexion.php';
 ?>
 
 <form method="POST" action="">
     <fieldset>
         <legend>Connexion</legend>
         <p>
-            <label for="inscription_pseudo">Pseudo&nbsp;:</label><br>
-            <input type="text" name="inscription_pseudo" value="<?= $valeursEchappees['inscription_pseudo'] ?? "" ?> " /><br>
-            <?= $errors['inscription_pseudo'] ?? "" ?>
+            <label for="connexion_pseudo">Pseudo&nbsp;:</label><br>
+            <input type="text" name="connexion_pseudo" value="<?= $valeursEchappees['connexion_pseudo'] ?? "" ?> " /><br>
+            <?= $errors['connexion_pseudo'] ?? "" ?>
         </p>
         <p>
-            <label for="connexion_pseudo">Mot de passe&nbsp;:</label><br>
-            <input type="password" id="connexion_pseudo" name="connexion_pseudo" value="<?= $valeursEchappees['connexion_pseudo'] ?? "" ?>" /><br>
-            <?= $errors['connexion_pseudo'] ?? "" ?>
+            <label for="connexion_motDePasse">Mot de passe&nbsp;:</label><br>
+            <input type="password" id="connexion_motDePasse" name="connexion_motDePasse" value="<?= $valeursEchappees['connexion_motDePasse'] ?? "" ?>" /><br>
+            <?= $errors['connexion_motDePasse'] ?? "" ?>
         </p>
         <p>
             <a href=""><button type="submit">Se connecter</button></a>
@@ -25,4 +25,4 @@ require_once 'gestion_connexion.php';
     </fieldset>
 </form>
 
-<?php require_once 'footer.php'; ?>
+<?php require_once 'includes/footer.php'; ?>

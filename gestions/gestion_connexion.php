@@ -31,24 +31,24 @@ if (($_SERVER["REQUEST_METHOD"] === "POST")) {
     foreach ($champsConfig as $nomChamps => $regles) {
 
         $connexionPseudo = trim(htmlentities($_POST["connexion_pseudo"]));
-        $valeursEchappees['connexion_pseudo'] = $inscriptionPseudo;
+        $valeursEchappees['connexion_pseudo'] = $connexionPseudo;
 
-        if ((empty($inscriptionPseudo)) && ($champsConfig["connexion_pseudo"]["requis"])) {
+        if ((empty($connexionPseudo)) && ($champsConfig["connexion_pseudo"]["requis"])) {
             $errors['connexion_pseudo'] = $formMessage["requis"];
-        } elseif (strlen($inscriptionPseudo) < $champsConfig["connexion_pseudo"]["minLength"]) {
+        } elseif (strlen($connexionPseudo) < $champsConfig["connexion_pseudo"]["minLength"]) {
             $errors['connexion_pseudo'] = $formMessage["maxLength"];
-        } elseif (strlen($inscriptionPseudo) > $champsConfig["connexion_pseudo"]["maxLength"]) {
+        } elseif (strlen($connexionPseudo) > $champsConfig["connexion_pseudo"]["maxLength"]) {
             $errors['connexion_pseudo'] = $formMessage["minLength"];
         }
 
         $connexionMotDePasse = trim(htmlentities($_POST["connexion_motDePasse"]));
-        $valeursEchappees['connexion_motDePasse'] = $inscriptionMotDePasse;
+        $valeursEchappees['connexion_motDePasse'] = $connexionMotDePasse;
 
-        if ((empty($inscriptionMotDePasse)) && ($champsConfig["connexion_motDePasse"]["requis"])) {
+        if ((empty($connexionMotDePasse)) && ($champsConfig["connexion_motDePasse"]["requis"])) {
             $errors['connexion_motDePasse'] = $formMessage["requis"];
-        } elseif (strlen($inscriptionMotDePasse) < $champsConfig["connexion_motDePasse"]["minLength"]) {
+        } elseif (strlen($connexionMotDePasse) < $champsConfig["connexion_motDePasse"]["minLength"]) {
             $errors['connexion_motDePasse'] = $formMessage["maxLength"];
-        } elseif (strlen($inscriptionMotDePasse) > $champsConfig["connexion_motDePasse"]["maxLength"]) {
+        } elseif (strlen($connexionMotDePasse) > $champsConfig["connexion_motDePasse"]["maxLength"]) {
             $errors['connexion_motDePasse'] = $formMessage["minLength"];
         }
     }

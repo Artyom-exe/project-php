@@ -1,8 +1,8 @@
 <?php
 $metaDescription = "Contact";
 $pageTitre = "Contact";
-require_once 'header.php';
-require_once 'gestion_formulaire.php';
+require_once 'includes/header.php';
+require_once 'gestions/gestion_formulaire.php';
 ?>
 
 <form method="POST" action="">
@@ -34,4 +34,4 @@ require_once 'gestion_formulaire.php';
     </fieldset>
 </form>
 
-<?php require_once 'footer.php'; ?>
+<?php require_once 'includes/footer.php'; ?>

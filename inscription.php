@@ -1,8 +1,8 @@
 <?php
 $metaDescription = "Inscription";
 $pageTitre = "Inscription";
-require_once 'header.php';
-require_once 'gestion_inscription.php';
+require_once 'includes/header.php';
+require_once 'gestions/gestion_inscription.php';
 ?>
 
 <form method="POST" action="">
@@ -34,4 +34,4 @@ require_once 'gestion_inscription.php';
     </fieldset>
 </form>
 
-<?php require_once 'footer.php'; ?>
+<?php require_once 'includes/footer.php'; ?>
