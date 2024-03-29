@@ -1,4 +1,5 @@
 <?php
+require_once 'includes/fonctions.php';
 
 $errors = [];
 $valeursEchappees = [];
@@ -20,38 +21,15 @@ $formMessage = [
     "requis" => "Ce champs est requis",
     "email" => "Veuillez entrer une adresse mail valide!",
     "minMaxLength" => "Ce champs doit comprendre entre %0% et %1% caractères",
-    "minLength" => "Ce champs doit avoir au plus %0% caractères",
-    "maxLength" => "Ce champs doit avoir au moins %0% caractères",
+    "minLength" => "Ce champs doit avoir au moins %0% caractères",
+    "maxLength" => "Ce champs doit avoir au plus %0% caractères",
     "envoi_echec" => "Un problème est survenu",
     "envoi_succes" => "Vous êtes connecté"
 ];
 
 if (($_SERVER["REQUEST_METHOD"] === "POST")) {
 
-    foreach ($champsConfig as $nomChamps => $regles) {
-
-        $connexionPseudo = trim(htmlentities($_POST["connexion_pseudo"]));
-        $valeursEchappees['connexion_pseudo'] = $connexionPseudo;
-
-        if ((empty($connexionPseudo)) && ($champsConfig["connexion_pseudo"]["requis"])) {
-            $errors['connexion_pseudo'] = $formMessage["requis"];
-        } elseif (strlen($connexionPseudo) < $champsConfig["connexion_pseudo"]["minLength"]) {
-            $errors['connexion_pseudo'] = $formMessage["maxLength"];
-        } elseif (strlen($connexionPseudo) > $champsConfig["connexion_pseudo"]["maxLength"]) {
-            $errors['connexion_pseudo'] = $formMessage["minLength"];
-        }
-
-        $connexionMotDePasse = trim(htmlentities($_POST["connexion_motDePasse"]));
-        $valeursEchappees['connexion_motDePasse'] = $connexionMotDePasse;
-
-        if ((empty($connexionMotDePasse)) && ($champsConfig["connexion_motDePasse"]["requis"])) {
-            $errors['connexion_motDePasse'] = $formMessage["requis"];
-        } elseif (strlen($connexionMotDePasse) < $champsConfig["connexion_motDePasse"]["minLength"]) {
-            $errors['connexion_motDePasse'] = $formMessage["maxLength"];
-        } elseif (strlen($connexionMotDePasse) > $champsConfig["connexion_motDePasse"]["maxLength"]) {
-            $errors['connexion_motDePasse'] = $formMessage["minLength"];
-        }
-    }
+    gestion_formulaire($formMessage, $champsConfig, $errors, $valeursEchappees);
 
     if (empty($errors)) {
         $valeursEchappees = [];

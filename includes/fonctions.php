@@ -18,3 +18,26 @@ if (!function_exists('nav_item')) {
 HTML;
     }
 }
+
+// -----------------Fonction_gestion_formulaire-----------------
+
+
+function gestion_formulaire(array $formMessage, array $champsConfig, array &$errors, array &$valeursEchappees): void
+{
+
+    foreach ($champsConfig as $nomChamps => $regles) {
+
+        $valeur = trim(htmlentities($_POST[$nomChamps]));
+        $valeursEchappees[$nomChamps] = $valeur;
+
+        if (isset($regles['requis']) && $regles['requis'] && empty($valeur)) {
+            $errors[$nomChamps] = $formMessage["requis"];
+        } elseif (isset($regles["minLength"]) && strlen($valeur) < $regles["minLength"]) {
+            $errors[$nomChamps] = str_replace("%0%", $regles["minLength"], $formMessage["minLength"]);
+        } elseif (isset($regles["maxLength"]) && strlen($valeur) > $regles["maxLength"]) {
+            $errors[$nomChamps] = str_replace("%0%", $regles["maxLength"], $formMessage["maxLength"]);
+        } elseif (isset($regles['type']) && $regles["type"] === "email" && !filter_var($valeur, FILTER_VALIDATE_EMAIL)) {
+            $errors[$nomChamps] = $formMessage["email"];
+        }
+    }
+}
