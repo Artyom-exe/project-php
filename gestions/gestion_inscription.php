@@ -18,7 +18,9 @@ $champsConfig = [
     'inscription_motDePasse_confirmation' => [
         'requis' => true,
         'minLength' => 8,
-        'maxLength' => 72
+        'maxLength' => 72,
+        'confirme' => 'inscription_motDePasse'
+
     ],
     'inscription_email' => [
         'requis' => true,
@@ -32,6 +34,7 @@ $formMessage = [
     "minMaxLength" => "Ce champs doit comprendre entre %0% et %1% caractères",
     "minLength" => "Ce champs doit avoir au moins %0% caractères",
     "maxLength" => "Ce champs doit avoir au plus %0% caractères",
+    "confirme" => "Le mot de passe est incorrect",
     "envoi_echec" => "Un problème est survenu",
     "envoi_succes" => "Vous êtes inscrit"
 ];

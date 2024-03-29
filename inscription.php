@@ -20,7 +20,7 @@ require_once 'gestions/gestion_inscription.php';
         </p>
         <p>
             <label for="inscription_motDePasse_confirmation">Confirmer votre mot de passe&nbsp;:</label><br>
-            <input type="password" id="inscription_motDePasse_confirmation" name="inscription_motDePasse_confirmation"><?= $valeursEchappees['inscription_motDePasse_confirmation'] ?? "" ?></input><br>
+            <input type="password" id="inscription_motDePasse_confirmation" name="inscription_motDePasse_confirmation" value="<?= $valeursEchappees['inscription_motDePasse_confirmation'] ?? "" ?>"></input><br>
             <?= $errors['inscription_motDePasse_confirmation'] ?? "" ?>
         </p>
         <p>

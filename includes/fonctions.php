@@ -38,6 +38,8 @@ function gestion_formulaire(array $formMessage, array $champsConfig, array &$err
             $errors[$nomChamps] = str_replace("%0%", $regles["maxLength"], $formMessage["maxLength"]);
         } elseif (isset($regles['type']) && $regles["type"] === "email" && !filter_var($valeur, FILTER_VALIDATE_EMAIL)) {
             $errors[$nomChamps] = $formMessage["email"];
+        } elseif (isset($regles['confirme']) && $valeur !== $_POST[$regles['confirme']]) {
+            $errors[$nomChamps] = $formMessage["confirme"];
         }
     }
 }
