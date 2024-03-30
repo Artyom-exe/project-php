@@ -1,8 +1,10 @@
 <?php
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'constantes.php';
+
 $metaDescription = "Contact";
 $pageTitre = "Contact";
-require_once 'includes/header.php';
-require_once 'gestions/gestion_formulaire.php';
+require_once __DIR__ . DS . 'components' . DS . 'header.php';
+require_once __DIR__ . DS . 'app' . DS . 'controllers' . DS . 'contactController.php';
 ?>
 
 <form method="POST" action="">
@@ -34,4 +36,4 @@ require_once 'gestions/gestion_formulaire.php';
     </fieldset>
 </form>
 
-<?php require_once 'includes/footer.php'; ?>
+<?php require_once __DIR__ . DS . 'components' . DS . 'footer.php'; ?>

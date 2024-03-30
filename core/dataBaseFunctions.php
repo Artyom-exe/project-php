@@ -1,7 +1,5 @@
 <?php
-require 'donnees_cachees.php';
-
-
+require_once dirname(__DIR__) . DS . 'private_data' . DS . 'dataConnectionDb.php';
 
 function connexion_db(string $nomDuServeur, string $nomBDD, string $nomUtilisateur, $motDePasse): ?PDO
 {
@@ -19,7 +17,6 @@ function connexion_db(string $nomDuServeur, string $nomBDD, string $nomUtilisate
         // Afficher les potentielles erreurs rencontrées lors de la tentative de connexion à la base de données.
         // Attention, les informations affichées ici pouvant être sensibles, cet affichage est uniquement destiné à la phase de développement.
         echo "Erreur d'exécution de requête : " . $e->getMessage() . PHP_EOL;
-        return null;
     }
 
     return $pdo;

@@ -1,43 +1,15 @@
 <?php
-require_once 'includes/fonctions.php';
+require_once dirname(__DIR__, 2) . DS . 'core' . DS . 'formGestion.php';
+require_once dirname(__DIR__, 1) . DS . 'models' . DS . 'authentificationModel.php';
+require_once dirname(__DIR__, 2) . DS . 'core' . DS . 'messagesGestion.php';
+require_once dirname(__DIR__, 2) . DS . 'private_data' . DS . 'dataConnectionDb.php';
 
 $errors = [];
 $valeursEchappees = [];
 
-$champsConfig = [
-    'inscription_pseudo' => [
-        'requis' => true,
-        'minLength' => 2,
-        'maxLength' => 255
-    ],
-    'inscription_motDePasse' => [
-        'requis' => true,
-        'minLength' => 8,
-        'maxLength' => 72
-    ],
-    'inscription_motDePasse_confirmation' => [
-        'requis' => true,
-        'minLength' => 8,
-        'maxLength' => 72,
-        'confirme' => 'inscription_motDePasse'
+$champsConfig = obtenir_ChampsConfigsAuthentification();
 
-    ],
-    'inscription_email' => [
-        'requis' => true,
-        'type' => 'email'
-    ]
-];
-
-$formMessage = [
-    "requis" => "Ce champs est requis",
-    "email" => "Veuillez entrer une adresse mail valide!",
-    "minMaxLength" => "Ce champs doit comprendre entre %0% et %1% caractères",
-    "minLength" => "Ce champs doit avoir au moins %0% caractères",
-    "maxLength" => "Ce champs doit avoir au plus %0% caractères",
-    "confirme" => "Le mot de passe est incorrect",
-    "envoi_echec" => "Un problème est survenu",
-    "envoi_succes" => "Vous êtes inscrit"
-];
+$formMessage = $formMessage = importer_messages('formMessages.json');
 
 
 if (($_SERVER["REQUEST_METHOD"] === "POST")) {
@@ -47,11 +19,6 @@ if (($_SERVER["REQUEST_METHOD"] === "POST")) {
     // Après la validation du formulaire et avant d'afficher le message de succès
 
     if (empty($errors)) {
-
-        $nomDuServeur = "localhost";
-        $nomUtilisateur = "root";
-        $motDePasse = "";
-        $nomBDD = "project_php";
 
         // Tenter d'établir une connexion à la base de données :
         try {
@@ -69,9 +36,9 @@ if (($_SERVER["REQUEST_METHOD"] === "POST")) {
         }
 
         // Création d'un nouvel utilisateur dans la base de données
-        $pseudo = $valeursEchappees['inscription_pseudo'];
-        $motDePasse = password_hash($valeursEchappees['inscription_motDePasse'], PASSWORD_DEFAULT); // Hashage du mot de passe
-        $email = $valeursEchappees['inscription_email'];
+        $pseudo = $valeursEchappees['pseudo'];
+        $motDePasse = password_hash($valeursEchappees['motDePasse'], PASSWORD_DEFAULT); // Hashage du mot de passe
+        $email = $valeursEchappees['email'];
 
         // Requête SQL d'insertion dans la base de données
         $requete = "INSERT INTO t_utilisateur_uti (uti_pseudo, uti_motdepasse, uti_email) VALUES (:pseudo, :mot_de_passe, :email)";

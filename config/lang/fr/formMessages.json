@@ -1,0 +1,11 @@
+{
+  "requis": "Ce champ est requis!",
+  "email": "Veuillez entrer une adresse mail valide!",
+  "minMaxLength": "Ce champ doit comprendre entre %0% et %1% caractères",
+  "minLength": "Ce champ doit avoir au moins %0% caractères",
+  "maxLength": "Ce champ doit avoir au plus %0% caractères",
+  "champs_echec": "Veuillez remplir les champs correctement!",
+  "envoi_echec": "Le formulaire n'a pas été envoyé!",
+  "envoi_succes": "Le formulaire a bien été envoyé!",
+  "confirme": "Le mot de passe est incorrect "
+}
