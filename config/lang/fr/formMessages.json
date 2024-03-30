@@ -7,5 +7,7 @@
   "champs_echec": "Veuillez remplir les champs correctement!",
   "envoi_echec": "Le formulaire n'a pas été envoyé!",
   "envoi_succes": "Le formulaire a bien été envoyé!",
-  "confirme": "Le mot de passe est incorrect "
+  "confirme": "Le mot de passe est incorrect ",
+  "connection": "Vous êtes connecté",
+  "connection_echec:": "Échec de la connexion"
 }

@@ -1,8 +1,8 @@
-const derouler = (element, classe) => {
+// const derouler = (element, classe) => {
 
-    const contenu = document.querySelector(element)
+//     const contenu = document.querySelector(element)
 
-    contenu.classList.add(classe)
-}
+//     contenu.classList.add(classe)
+// }
 
-export { derouler }
+// export { derouler }

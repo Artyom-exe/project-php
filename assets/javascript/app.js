@@ -8,6 +8,6 @@
 //     derouler('div.enSavoirPlus', 'derouler', buttonClick)
 // }
 
-// const button = document.querySelector('legend a')
+// const button = document.querySelector('maCible')
 
 // button.addEventListener("click", enSavoirPlus)

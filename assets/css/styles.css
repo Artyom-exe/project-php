@@ -108,7 +108,7 @@ nav a:hover {
 nav a:focus {
     border-bottom: solid 3px #323E6E;
 }
-/* .enSavoirPlus
+.enSavoirPlus
 {
     overflow: hidden;
     display: inline-block;
@@ -118,7 +118,7 @@ nav a:focus {
 .derouler
 {
     max-height: 600px;
-} */
+}
 .active {
     border-bottom: solid 3px #323E6E;
 }

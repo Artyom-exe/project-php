@@ -1,8 +1,9 @@
 <?php
 require_once dirname(__DIR__, 2) . DS . 'core' . DS . 'formGestion.php';
-require_once dirname(__DIR__, 1) . DS . 'models' . DS . 'authentificationModel.php';
+require_once dirname(__DIR__) . DS . 'models' . DS . 'authentificationModel.php';
 require_once dirname(__DIR__, 2) . DS . 'core' . DS . 'messagesGestion.php';
 require_once dirname(__DIR__, 2) . DS . 'private_data' . DS . 'dataConnectionDb.php';
+require_once dirname(__DIR__, 2) . DS . 'core' . DS . 'dataBaseFunctions.php';
 
 $errors = [];
 $valeursEchappees = [];
@@ -20,20 +21,7 @@ if (($_SERVER["REQUEST_METHOD"] === "POST")) {
 
     if (empty($errors)) {
 
-        // Tenter d'établir une connexion à la base de données :
-        try {
-            // Instancier une nouvelle connexion.
-            $pdo = new PDO("mysql:host=$nomDuServeur;dbname=$nomBDD;charset=utf8", $nomUtilisateur, $motDePasse);
-
-            // Définir le mode d'erreur sur "exception".
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        }
-        // Capturer les exceptions en cas d'erreur de connexion :
-        catch (PDOException $e) {
-            // Afficher les potentielles erreurs rencontrées lors de la tentative de connexion à la base de données.
-            // Attention, les informations affichées ici pouvant être sensibles, cet affichage est uniquement destiné à la phase de développement.
-            echo "Erreur d'exécution de requête : " . $e->getMessage() . PHP_EOL;
-        }
+        $pdo = connexion_db($nomDuServeur, $nomBDD, $nomUtilisateur, $motDePasse);
 
         // Création d'un nouvel utilisateur dans la base de données
         $pseudo = $valeursEchappees['pseudo'];

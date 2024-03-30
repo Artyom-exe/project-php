@@ -11,6 +11,8 @@ function connexion_db(string $nomDuServeur, string $nomBDD, string $nomUtilisate
 
         // Définir le mode d'erreur sur "exception".
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        return $pdo;
     }
     // Capturer les exceptions en cas d'erreur de connexion :
     catch (PDOException $e) {
@@ -18,6 +20,4 @@ function connexion_db(string $nomDuServeur, string $nomBDD, string $nomUtilisate
         // Attention, les informations affichées ici pouvant être sensibles, cet affichage est uniquement destiné à la phase de développement.
         echo "Erreur d'exécution de requête : " . $e->getMessage() . PHP_EOL;
     }
-
-    return $pdo;
 }

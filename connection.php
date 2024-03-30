@@ -23,7 +23,7 @@ require_once __DIR__ . DS . 'app' . DS . 'controllers' . DS . 'connectionControl
         <p>
             <a href=""><button type="submit">Se connecter</button></a>
         </p>
-        <p><a href="/register.php">S'inscrire</a>
+        <p id="maCible"><a href="/register.php">S'inscrire</a>
     </fieldset>
 </form>
 

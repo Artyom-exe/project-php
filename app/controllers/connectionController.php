@@ -6,7 +6,7 @@ require_once dirname(__DIR__, 2) . DS . 'core' . DS . 'messagesGestion.php';
 $errors = [];
 $valeursEchappees = [];
 
-$champsConfig = obtenir_ChampsConfigsAuthentification();
+$champsConfig = obtenir_ChampsConfigsAuthentification(false);
 
 $formMessage = importer_messages('formMessages.json');
 
@@ -18,8 +18,8 @@ if (($_SERVER["REQUEST_METHOD"] === "POST")) {
 
         $valeursEchappees = [];
 
-        echo "<div style= 'text-align: center; font-size: 1.2em; color: green; font-weight: bold; margin: 10px;'> " . $formMessage["envoi_succes"] . "</div>";
+        echo "<div style= 'text-align: center; font-size: 1.2em; color: green; font-weight: bold; margin: 10px;'> " . $formMessage["connection"] . "</div>";
     } else {
-        echo "<div style= 'text-align: center; font-size: 1.2em; color: red; font-weight: bold; margin: 10px;'> " . $formMessage["envoi_echec"] . "</div>";
+        echo "<div style= 'text-align: center; font-size: 1.2em; color: red; font-weight: bold; margin: 10px;'> " . $formMessage["connection_echec"] . "</div>";
     }
 };

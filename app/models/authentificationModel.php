@@ -1,9 +1,9 @@
 <?php
 
-function obtenir_ChampsConfigsAuthentification(): array
+function obtenir_ChampsConfigsAuthentification($register = true): array
 {
 
-    return [
+    $configs = [
         'pseudo' => [
             'requis' => true,
             'minLength' => 2,
@@ -13,16 +13,22 @@ function obtenir_ChampsConfigsAuthentification(): array
             'requis' => true,
             'minLength' => 8,
             'maxLength' => 72
-        ],
-        'motDePasse_confirmation' => [
+        ]
+    ];
+
+    if ($register) {
+        $configs['motDePasse_confirmation'] = [
             'requis' => true,
             'minLength' => 8,
             'maxLength' => 72,
             'confirme' => 'motDePasse'
-        ],
-        'email' => [
+        ];
+
+        $configs['email'] = [
             'requis' => true,
             'type' => 'email'
-        ]
-    ];
+        ];
+    }
+
+    return $configs;
 }
