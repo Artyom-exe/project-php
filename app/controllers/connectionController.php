@@ -3,6 +3,8 @@ require_once dirname(__DIR__, 2) . DS . 'core' . DS . 'formGestion.php';
 require_once dirname(__DIR__, 1) . DS . 'models' . DS . 'authentificationModel.php';
 require_once dirname(__DIR__, 2) . DS . 'core' . DS . 'messagesGestion.php';
 require_once dirname(__DIR__, 2) . DS . 'core' . DS . 'dataBaseFunctions.php';
+require_once dirname(__DIR__, 2) . DS . 'core' . DS . 'profilGestion.php';
+require_once dirname(__DIR__, 2) . DS . 'core' . DS . 'authentificationGestion.php';
 
 $errors = [];
 $valeursEchappees = [];
@@ -37,12 +39,10 @@ if (($_SERVER["REQUEST_METHOD"] === "POST")) {
 
             $utilisateur = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if ($utilisateur !== false) {
-                $valeursEchappees = [];
-                var_dump($utilisateur);
-                echo "<div style= 'text-align: center; font-size: 1.2em; color: green; font-weight: bold; margin: 10px;'> " . $formMessage["connection"] . "</div>";
+            if ($utilisateur) {
+                connecter_utilisateur($utilisateur['uti_id']);
+                echo $_SESSION['utilisateur'];
             } else {
-                var_dump($utilisateur);
                 echo "<div style= 'text-align: center; font-size: 1.2em; color: red; font-weight: bold; margin: 10px;'> " . $formMessage["connection_echec"] . "</div>";
             }
         } else {

@@ -1,6 +1,11 @@
 <?php
+
 // Définir un raccourci pour DIRECTORY_SEPARATOR.
 define('DS', DIRECTORY_SEPARATOR);
+
+require_once dirname(__DIR__) . DS . "core" . DS . "profilGestion.php";
+
+GestionSession();
 
 // Permet de distinguer le mode développement du mode production.
 define('DEV_MODE', true);

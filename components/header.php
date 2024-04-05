@@ -1,4 +1,6 @@
+<?php require_once dirname(__DIR__) . DS . 'config' . DS . 'constantes.php'; ?>
 <?php require_once dirname(__DIR__) . DS . 'core' . DS . 'menuGestion.php'; ?>
+
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -21,6 +23,7 @@
                 <?= nav_item('index.php', 'Accueil'); ?>
                 <?= nav_item('contact.php', 'Contact'); ?>
                 <?= nav_item('connection.php', 'Connexion'); ?>
+                <?= nav_item('profil.php', 'Profil'); ?>
             </ul>
         </nav>
     </header>
