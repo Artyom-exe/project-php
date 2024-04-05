@@ -21,3 +21,8 @@ function connexion_db(string $nomDuServeur, string $nomBDD, string $nomUtilisate
         echo "Erreur d'exécution de requête : " . $e->getMessage() . PHP_EOL;
     }
 }
+
+function gerer_exceptions($e)
+{
+    echo "Erreur d'exécution de requête : " . $e->getMessage() . PHP_EOL;
+}
