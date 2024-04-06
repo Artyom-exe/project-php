@@ -26,3 +26,26 @@ function gerer_exceptions($e)
 {
     echo "Erreur d'exécution de requête : " . $e->getMessage() . PHP_EOL;
 }
+
+function verifier_valeurDbExiste(?PDO $pdo, string $table, string $column, string $valeur)
+{
+    try {
+        $requete = "SELECT COUNT(*) AS nbr FROM $table  WHERE $column = '" . $valeur . "'";
+
+        // Exécuter la requête.
+        $stmt = $pdo->query($requete);
+    } catch (PDOException $e) {
+        // gerer_exceptions($e);
+    }
+
+    if (isset($stmt) && $stmt !== false) {
+        $utilisateur = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (isset($utilisateur['nbr']) && ($utilisateur['nbr'] !== 0)) {
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        return false;
+    }
+}

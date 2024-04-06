@@ -8,7 +8,7 @@ require_once dirname(__DIR__, 2) . DS . 'core' . DS . 'dataBaseFunctions.php';
 $errors = [];
 $valeursEchappees = [];
 
-$champsConfig = obtenir_ChampsConfigsAuthentification();
+$champsConfig = obtenir_ChampsConfigsAuthentification($pdo);
 
 $formMessage = $formMessage = importer_messages('formMessages.json');
 
@@ -51,7 +51,7 @@ if (($_SERVER["REQUEST_METHOD"] === "POST")) {
             // Affichage de l'erreur en cas d'échec de l'insertion
             echo "Erreur lors de l'insertion dans la base de données : " . $e->getMessage();
         }
-    } else {
-        echo "<div style= 'text-align: center; font-size: 1.2em; color: red; font-weight: bold; margin: 10px;'> " . $formMessage["envoi_echec"] . "</div>";
     }
+} else {
+    echo "<div style= 'text-align: center; font-size: 1.2em; color: red; font-weight: bold; margin: 10px;'> " . $formMessage["envoi_echec"] . "</div>";
 }

@@ -1,6 +1,10 @@
 <?php
+require_once dirname(__DIR__, 2) . DS . "core" . DS . "dataBaseFunctions.php";
+require_once dirname(__DIR__, 2) . DS . "private_data" . DS . "dataConnectionDb.php";
 
-function obtenir_ChampsConfigsAuthentification($register = true): array
+connexion_db($nomDuServeur, $nomBDD, $nomUtilisateur, $motDePasse);
+
+function obtenir_ChampsConfigsAuthentification($pdo, $register = true): array
 {
 
     $configs = [
@@ -17,6 +21,10 @@ function obtenir_ChampsConfigsAuthentification($register = true): array
     ];
 
     if ($register) {
+        $configs['pseudo'] = [
+            'existeDeja' => verifier_valeurDbExiste($pdo, 't_utilisateur_uti', 'uti_pseudo',  $_POST['pseudo'])
+        ];
+
         $configs['motDePasse_confirmation'] = [
             'requis' => true,
             'minLength' => 8,
