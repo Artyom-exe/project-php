@@ -8,7 +8,6 @@ function connexion_db(): ?PDO
     $motDePasse = "";
     $nomBDD = "project_php";
 
-
     // Tenter d'établir une connexion à la base de données :
     try {
         // Instancier une nouvelle connexion.

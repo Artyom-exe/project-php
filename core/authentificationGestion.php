@@ -5,7 +5,7 @@ function connecter_utilisateur(int $id): void
 {
 
     GestionSession();
-    $_SESSION['utilisateur'] = $id;
+    $_SESSION['id'] = $id;
 }
 
 function deconnecter_utilisateur()

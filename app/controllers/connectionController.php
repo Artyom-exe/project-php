@@ -41,7 +41,8 @@ if (($_SERVER["REQUEST_METHOD"] === "POST")) {
 
             if ($utilisateur) {
                 connecter_utilisateur($utilisateur['uti_id']);
-                echo $_SESSION['utilisateur'];
+                header("location: /profil.php");
+                exit();
             } else {
                 echo "<div style= 'text-align: center; font-size: 1.2em; color: red; font-weight: bold; margin: 10px;'> " . $formMessage["connection_echec"] . "</div>";
             }

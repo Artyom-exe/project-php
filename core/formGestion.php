@@ -8,6 +8,7 @@ function gestion_formulaire(array $formMessage, array $champsConfig, array &$err
     foreach ($champsConfig as $nomChamps => $regles) {
 
         $valeur = trim(htmlentities($_POST[$nomChamps]));
+        echo $valeur;
         $valeursEchappees[$nomChamps] = $valeur;
 
         if (isset($regles['requis']) && $regles['requis'] && empty($valeur)) {

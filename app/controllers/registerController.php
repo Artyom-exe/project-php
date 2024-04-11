@@ -8,8 +8,6 @@ require_once dirname(__DIR__, 2) . DS . 'core' . DS . 'dataBaseFunctions.php';
 $errors = [];
 $valeursEchappees = [];
 
-$pdo = connexion_db($nomDuServeur, $nomBDD, $nomUtilisateur, $motDePasse);
-
 $champsConfig = obtenir_ChampsConfigsAuthentification();
 
 $formMessage = $formMessage = importer_messages('formMessages.json');

@@ -1,8 +1,4 @@
 <?php
-require_once dirname(__DIR__, 2) . DS . "core" . DS . "dataBaseFunctions.php";
-require_once dirname(__DIR__, 2) . DS . "private_data" . DS . "dataConnectionDb.php";
-
-$pdo = connexion_db($nomDuServeur, $nomBDD, $nomUtilisateur, $motDePasse);
 
 function obtenir_ChampsConfigsAuthentification($register = true): array
 {
@@ -12,7 +8,7 @@ function obtenir_ChampsConfigsAuthentification($register = true): array
             'requis' => true,
             'minLength' => 2,
             'maxLength' => 255,
-            'pseudo_unique' => true
+
         ],
         'motDePasse' => [
             'requis' => true,
