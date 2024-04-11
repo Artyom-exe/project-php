@@ -1,5 +1,7 @@
 <?php
 
+require_once dirname(__DIR__) . DS . "core" . DS . "dataBaseFunctions.php";
+
 function gestion_formulaire(array $formMessage, array $champsConfig, array &$errors, array &$valeursEchappees): void
 {
 
@@ -18,6 +20,10 @@ function gestion_formulaire(array $formMessage, array $champsConfig, array &$err
             $errors[$nomChamps] = $formMessage["email"];
         } elseif (isset($regles['confirme']) && $valeur !== $_POST[$regles['confirme']]) {
             $errors[$nomChamps] = $formMessage["confirme"];
+        } elseif (isset($regles['mail_unique']) && $regles['mail_unique'] === true && verifier_valeurDbExiste('t_utilisateur_uti', 'uti_email', $_POST['email'])) {
+            $errors[$nomChamps] = $formMessage["mail_existe"];
+        } elseif (isset($regles['pseudo_unique']) && $regles['pseudo_unique'] === true && verifier_valeurDbExiste('t_utilisateur_uti', 'uti_pseudo', $_POST['pseudo'])) {
+            $errors[$nomChamps] = $formMessage["pseudo_existe"];
         }
     }
 }

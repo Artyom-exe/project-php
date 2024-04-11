@@ -21,7 +21,7 @@ if (($_SERVER["REQUEST_METHOD"] === "POST")) {
 
         try {
 
-            $pdo = connexion_db($nomDuServeur, $nomBDD, $nomUtilisateur, $motDePasse);
+            $pdo = connexion_db();
 
             $pseudo = $_POST['pseudo'];
             $requete = "SELECT * FROM t_utilisateur_uti WHERE uti_pseudo = :pseudo";

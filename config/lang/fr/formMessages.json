@@ -10,6 +10,6 @@
   "confirme": "Le mot de passe est incorrect ",
   "connection": "Vous êtes connecté",
   "connection_echec": "Échec de la connexion",
-  "pseudo_existe": "Ce pseudo existe déjà",
-  "mail_existe": "Cet email existe déjà"
+  "mail_existe": "Cet email existe déjà",
+  "pseudo_existe": "Ce pseudo existe déjà"
 }

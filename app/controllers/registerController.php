@@ -10,7 +10,7 @@ $valeursEchappees = [];
 
 $pdo = connexion_db($nomDuServeur, $nomBDD, $nomUtilisateur, $motDePasse);
 
-$champsConfig = obtenir_ChampsConfigsAuthentification($pdo);
+$champsConfig = obtenir_ChampsConfigsAuthentification();
 
 $formMessage = $formMessage = importer_messages('formMessages.json');
 
@@ -23,7 +23,7 @@ if (($_SERVER["REQUEST_METHOD"] === "POST")) {
 
     if (empty($errors)) {
 
-        $pdo = connexion_db($nomDuServeur, $nomBDD, $nomUtilisateur, $motDePasse);
+        $pdo = connexion_db();
 
         // Création d'un nouvel utilisateur dans la base de données
         $pseudo = $valeursEchappees['pseudo'];

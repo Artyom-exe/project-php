@@ -1,8 +1,13 @@
 <?php
 require_once dirname(__DIR__) . DS . 'private_data' . DS . 'dataConnectionDb.php';
 
-function connexion_db(string $nomDuServeur, string $nomBDD, string $nomUtilisateur, $motDePasse): ?PDO
+function connexion_db(): ?PDO
 {
+    $nomDuServeur = "localhost";
+    $nomUtilisateur = "root";
+    $motDePasse = "";
+    $nomBDD = "project_php";
+
 
     // Tenter d'établir une connexion à la base de données :
     try {
@@ -27,8 +32,10 @@ function gerer_exceptions($e)
     echo "Erreur d'exécution de requête : " . $e->getMessage() . PHP_EOL;
 }
 
-function verifier_valeurDbExiste(?PDO $pdo, string $table, string $column, string $valeur)
+function verifier_valeurDbExiste(string $table, string $column, string $valeur)
 {
+    $pdo = connexion_db();
+
     try {
         $requete = "SELECT COUNT(*) AS nbr FROM $table  WHERE $column = '" . $valeur . "'";
 
@@ -37,6 +44,7 @@ function verifier_valeurDbExiste(?PDO $pdo, string $table, string $column, strin
     } catch (PDOException $e) {
         // gerer_exceptions($e);
     }
+
 
     if (isset($stmt) && $stmt !== false) {
         $utilisateur = $stmt->fetch(PDO::FETCH_ASSOC);

@@ -4,7 +4,7 @@ require_once dirname(__DIR__, 2) . DS . "private_data" . DS . "dataConnectionDb.
 
 $pdo = connexion_db($nomDuServeur, $nomBDD, $nomUtilisateur, $motDePasse);
 
-function obtenir_ChampsConfigsAuthentification($pdo, $register = true): array
+function obtenir_ChampsConfigsAuthentification($register = true): array
 {
 
     $configs = [
@@ -12,7 +12,7 @@ function obtenir_ChampsConfigsAuthentification($pdo, $register = true): array
             'requis' => true,
             'minLength' => 2,
             'maxLength' => 255,
-            'unique' => true
+            'pseudo_unique' => true
         ],
         'motDePasse' => [
             'requis' => true,
@@ -22,6 +22,13 @@ function obtenir_ChampsConfigsAuthentification($pdo, $register = true): array
     ];
 
     if ($register) {
+
+        $configs['pseudo'] = [
+            'pseudo_unique' => true,
+            'requis' => true,
+            'minLength' => 2,
+            'maxLength' => 255,
+        ];
 
         $configs['motDePasse_confirmation'] = [
             'requis' => true,
@@ -33,7 +40,7 @@ function obtenir_ChampsConfigsAuthentification($pdo, $register = true): array
         $configs['email'] = [
             'requis' => true,
             'type' => 'email',
-            'unique' => verifier_valeurDbExiste($pdo, 't_utilisateur_uti', 'uti_email', $_POST['email'])
+            'mail_unique' => true
         ];
     }
 
