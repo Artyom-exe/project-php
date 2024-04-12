@@ -44,18 +44,17 @@ if (($_SERVER["REQUEST_METHOD"] === "POST")) {
             $utilisateur = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if ($utilisateur) {
-                connecter_utilisateur($utilisateur['uti_id']);
 
                 $verifierIdentite = [
                     "utiId" => $utilisateur['uti_id'],
                     "utiEmail" => $utilisateur['uti_email'],
-                    "urlRedirection" => header("location: /confirm.php"),
-                    "envoyerCode " => true
+                    "urlRedirection" => "/confirm.php",
+                    "envoyerCode" => true
                 ];
 
                 $_SESSION['verifierIdentite'] = $verifierIdentite;
-
-                // ----------JE SUIS LA------------
+                header("location: /confirm.php");
+                exit();
             } else {
                 echo "<div style= 'text-align: center; font-size: 1.2em; color: red; font-weight: bold; margin: 10px;'> " . $formMessage["connection_echec"] . "</div>";
             }

@@ -9,12 +9,6 @@ function obtenir_ChampsConfigsModel(): array
                 'minLength' => 5,
                 'maxLength' => 5
             ],
-        ],
-        'form_request' => [
-            'email' => [
-                'requis' => true,
-                'type' => 'email'
-            ],
         ]
     ];
 }

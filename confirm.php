@@ -19,9 +19,6 @@ require_once __DIR__ . DS . 'components' . DS . 'header.php';
 
 <form method="post">
     <input type="hidden" name="form_request" value="formEnvoyerCode">
-    <label for="email">Email :</label>
-    <input type="email" id="email" name="email">
-    <?= $errors['verification_code'] ?? "" ?>
     <input type="submit" value="Demander un nouveau code">
 </form>
 
