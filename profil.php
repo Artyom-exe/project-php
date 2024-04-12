@@ -15,7 +15,7 @@ require_once __DIR__ . DS . 'components' . DS . 'header.php';
 
 <form method="POST" action="">
     <p>
-        <a href="/app//controllers/logoutController.php">Déconnexion</a>
+        <a href="/app/controllers/logoutController.php">Déconnexion</a>
     </p>
 </form>
 
