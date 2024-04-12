@@ -1,6 +1,7 @@
 <?php
 
 require_once dirname(__DIR__, 2) . DS . 'core' . DS . 'dataBaseFunctions.php';
+require_once dirname(__DIR__, 2) . DS . 'core' . DS . 'authentificationGestion.php';
 
 try {
 

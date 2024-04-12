@@ -41,7 +41,7 @@ function verifier_valeurDbExiste(string $table, string $column, string $valeur)
         // Exécuter la requête.
         $stmt = $pdo->query($requete);
     } catch (PDOException $e) {
-        // gerer_exceptions($e);
+        echo "Une erreur s'est produite";
     }
 
 
@@ -52,7 +52,5 @@ function verifier_valeurDbExiste(string $table, string $column, string $valeur)
         } else {
             return false;
         }
-    } else {
-        return false;
     }
 }

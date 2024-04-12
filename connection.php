@@ -12,7 +12,7 @@ require_once __DIR__ . DS . 'app' . DS . 'controllers' . DS . 'connectionControl
         <legend>Connexion</legend>
         <p>
             <label for="pseudo">Pseudo&nbsp;:</label><br>
-            <input type="text" name="pseudo" value="<?= $valeursEchappees['pseudo'] ?? "" ?> " /><br>
+            <input type="text" name="pseudo" value="<?= $valeursEchappees['pseudo'] ?? "" ?>" /><br>
             <?= $errors['pseudo'] ?? "" ?>
         </p>
         <p>
