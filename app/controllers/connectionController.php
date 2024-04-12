@@ -48,7 +48,7 @@ if (($_SERVER["REQUEST_METHOD"] === "POST")) {
                 $verifierIdentite = [
                     "utiId" => $utilisateur['uti_id'],
                     "utiEmail" => $utilisateur['uti_email'],
-                    "urlRedirection" => "/confirm.php",
+                    "urlRedirection" => "/profil.php",
                     "envoyerCode" => true
                 ];
 
