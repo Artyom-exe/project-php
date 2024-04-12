@@ -4,6 +4,12 @@ require_once dirname(__DIR__) . DS . 'models' . DS . 'authentificationModel.php'
 require_once dirname(__DIR__, 2) . DS . 'core' . DS . 'messagesGestion.php';
 require_once dirname(__DIR__, 2) . DS . 'private_data' . DS . 'dataConnectionDb.php';
 require_once dirname(__DIR__, 2) . DS . 'core' . DS . 'dataBaseFunctions.php';
+require_once dirname(__DIR__, 2) . DS . 'core' . DS . 'authentificationGestion.php';
+
+
+if (isset($_SESSION["id"]) && est_connecte($_SESSION["id"])) {
+    header("location: /profil.php");
+}
 
 $errors = [];
 $valeursEchappees = [];

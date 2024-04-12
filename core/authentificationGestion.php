@@ -13,7 +13,7 @@ function deconnecter_utilisateur()
     session_destroy();
 }
 
-function est_connecte(string $variable): bool
+function est_connecte(?string $variable): bool
 {
     if (isset($variable)) {
         return true;
