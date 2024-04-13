@@ -11,5 +11,6 @@
   "connection": "Vous êtes connecté",
   "connection_echec": "Échec de la connexion",
   "mail_existe": "Cet email existe déjà",
-  "pseudo_existe": "Ce pseudo existe déjà"
+  "pseudo_existe": "Ce pseudo existe déjà",
+  "code_incorrect": "Le code que vous avez entré est incorrect"
 }
