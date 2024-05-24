@@ -23,9 +23,9 @@ if (($_SERVER["REQUEST_METHOD"] === "POST")) {
 
     gestion_formulaire($formMessage, $champsConfig, $errors, $valeursEchappees);
 
-    // Après la validation du formulaire et avant d'afficher le message de succès
-
     if (empty($errors)) {
+
+        // Après la validation du formulaire et avant d'afficher le message de succès
 
         $pdo = connexion_db();
 
@@ -57,7 +57,7 @@ if (($_SERVER["REQUEST_METHOD"] === "POST")) {
             // Affichage de l'erreur en cas d'échec de l'insertion
             echo "Erreur lors de l'insertion dans la base de données : " . $e->getMessage();
         }
+    } else {
+        echo "<div style= 'text-align: center; font-size: 1.2em; color: red; font-weight: bold; margin: 10px;'> " . $formMessage["envoi_echec"] . "</div>";
     }
-} else {
-    echo "<div style= 'text-align: center; font-size: 1.2em; color: red; font-weight: bold; margin: 10px;'> " . $formMessage["envoi_echec"] . "</div>";
 }

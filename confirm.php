@@ -9,7 +9,13 @@ require_once __DIR__ . DS . 'components' . DS . 'header.php';
 
 <h1>Confime ton email</h1>
 
-<form method="post">
+<div class="content-message">
+    <?= $successMessage ?? "" ?>
+    <?= $errorMessage ?? "" ?>
+</div>
+
+<form method="POST" action="">
+
     <input type="hidden" name="form_code" value="formVerificationIdentitie">
     <label for="verification_code">Code de vérification :</label>
     <input type="text" id="verification_code" name="verification_code">

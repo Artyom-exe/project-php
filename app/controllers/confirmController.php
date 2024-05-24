@@ -19,25 +19,22 @@ if (!isset($_SESSION['verifierIdentite'])) {
     exit();
 };
 
-if (!isset($_SESSION['code']) && $_SESSION['verifierIdentite']['envoyerCode'] === true) {
+$_SESSION['code'] = rand(10000, 99999);
 
-    $_SESSION['code'] = rand(10000, 99999);
+try {
+    $pdo = connexion_db();
 
-    try {
-        $pdo = connexion_db();
+    $requete = "UPDATE t_utilisateur_uti SET uti_code_activation = :codeActivation WHERE uti_email = :email";
+    $stmt = $pdo->prepare($requete);
+    $stmt->bindValue(':codeActivation', $_SESSION['code'], PDO::PARAM_STR);
 
-        $requete = "UPDATE t_utilisateur_uti SET uti_code_activation = :codeActivation";
-        $stmt = $pdo->prepare($requete);
-        $stmt->bindValue(':codeActivation', $_SESSION['code'], PDO::PARAM_STR);
-
-        $stmt->execute();
-    } catch (\PDOException $e) {
-        gerer_exceptions($e);
-    }
-
-    mail($destinataire, $sujet, $_SESSION['code']);
-    echo "<div style= 'text-align: center; font-size: 1.2em; color: green; font-weight: bold; margin: 10px;'> Un code d'activation vous a été envoyé à l'adresse suivante: " . $destinataire . "</div>";
+    $stmt->execute();
+} catch (\PDOException $e) {
+    gerer_exceptions($e);
 }
+
+mail($destinataire, $sujet, $_SESSION['code']);
+$successMessage = "Le courriel a été envoyé avec succès.";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (isset($_POST['form_code'])) {
@@ -47,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if (empty($errors)) {
 
             if (isset($valeursEchappees['verification_code']) && intval($valeursEchappees['verification_code']) === $_SESSION['code']) {
-
+                // -----je suis ici ----
                 try {
                     $pdo = connexion_db();
 
@@ -78,15 +75,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 }
                 exit();
             } else {
-                echo $formMessage['code_incorrect'];
+                $errorMessage = $formMessage['code_incorrect'];
             }
         } else {
-            echo "<div style= 'text-align: center; font-size: 1.2em; color: red; font-weight: bold; margin: 10px;'> " . $formMessage["envoi_echec"] . "</div>";
-        }
-    }
-    if (isset($_POST['form_request'])) {
+            $errorMessage = $formMessage["envoi_echec"];
 
-        mail($destinataire, $sujet, $_SESSION['code']);
-        echo "<div style= 'text-align: center; font-size: 1.2em; color: green; font-weight: bold; margin: 10px;'> Un code d'activation vous a été envoyé à l'adresse suivante: " . $destinataire . "</div>";
+            if (isset($_POST['form_request'])) {
+                mail($destinataire, $sujet, $_SESSION['code']);
+                $successMessage = "Le courriel a été envoyé avec succès.";
+            }
+        }
     }
 }
