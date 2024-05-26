@@ -23,7 +23,7 @@ require_once __DIR__ . DS . 'components' . DS . 'header.php';
     <input type="submit" value="Soumettre">
 </form>
 
-<form method="post">
+<form method="post" action="">
     <input type="hidden" name="form_request" value="formEnvoyerCode">
     <input type="submit" value="Demander un nouveau code">
 </form>
