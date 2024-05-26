@@ -79,7 +79,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 //     setcookie(session_name(), '', time() - 42000, $params["path"], $params["domain"], $params["secure"], $params["httponly"]);
                 // }
 
-                // Bug => à corriger 
+                // Bug => à corriger
+
                 exit();
             } else {
                 $errorMessage = $formMessage['code_incorrect'];
