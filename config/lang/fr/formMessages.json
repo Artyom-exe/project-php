@@ -15,5 +15,6 @@
   "code_incorrect": "Le code que vous avez entré est incorrect",
   "mail_succes": "Le courriel a été envoyé avec succès.",
   "mail_echec": "L'envoi du courriel a échoué.",
-  "id-mdp-echec": "L'identifiant ou le mot de passe est incorrect"
+  "id-mdp-echec": "L'identifiant ou le mot de passe est incorrect",
+  "register_success": "Vous êtes bien enregistré !"
 }

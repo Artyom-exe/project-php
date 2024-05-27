@@ -5,7 +5,7 @@
 body {
     margin: 0;
     padding: 0;
-    font-family: 'Manrope';
+    font-family: 'Manrope', sans-serif;
     background-color: #E6EFFA;
     display: flex;
     flex-direction: column;
@@ -21,27 +21,32 @@ nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: rgb(255, 255, 255);
+    background-color: #FFF;
     padding: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    height: 40px;
 }
 
-/* Styles pour les éléments de la liste de navigation */
+nav ul {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
 nav ul li {
     display: inline-block;
     padding: 10px;
     margin-right: 20px;
+    font-size: 0.9em;
 }
 
-/* Styles pour le premier élément de la première liste de navigation */
+/* Styles pour le logo */
 nav ul:first-child li:first-child {
     color: black;
     font-size: 2em;
     font-weight: bold;
 }
 
-/* Styles pour le span dans le premier élément de la première liste de navigation */
 nav ul:first-child li:first-child span {
     background-color: #323E6E;
     border-radius: 10px;
@@ -51,21 +56,34 @@ nav ul:first-child li:first-child span {
     padding: 3px;
 }
 
-/* Styles pour les liens dans la barre de navigation */
+/* Styles pour les liens de navigation */
 nav a {
     text-decoration: none;
     font-size: 1.5em;
     color: black;
 }
 
-/* Styles pour le formulaire */
+nav a:hover,
+nav a:focus {
+    border-bottom: solid 3px #323E6E;
+}
+
+/* Styles pour le contenu principal */
+main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+}
+
+/* Styles pour les formulaires */
 form {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-/* Styles pour le champ de formulaire */
 form fieldset {
     margin-top: 2%;
     padding: 1%;
@@ -73,27 +91,14 @@ form fieldset {
     background-color: #FBFCFE;
     border: 3px solid #FBFCFE;
     border-radius: 10px;
-    width: 40%;
+    min-width: 40%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Styles pour les paragraphes dans le champ de formulaire */
-form fieldset p {
-    font-weight: bold;
-}
-
-/* Styles pour les libellés des champs de formulaire */
-form fieldset p label {
-    text-align: left;
-    width: 80%;
-    display: inline-block;
-}
-
-/* Styles pour la légende du champ de formulaire */
-fieldset legend {
+form fieldset legend {
     border-radius: 10px;
     padding: 5px;
     background-color: #323E6E;
@@ -102,27 +107,34 @@ fieldset legend {
     font-weight: bold;
 }
 
-/* Styles pour les champs de saisie de formulaire */
-p input {
-    height: 20px;
+form fieldset p {
+    font-weight: bold;
+}
+
+form fieldset p label {
+    text-align: left;
+    width: 80%;
+    display: inline-block;
+}
+
+form p input,
+form p textarea {
     width: 80%;
     border-radius: 5px;
     border: none;
     background-color: #E6EFFA;
 }
 
-/* Styles pour la zone de texte du formulaire */
-p textarea {
-    border-radius: 5px;
-    width: 80%;
+form p input {
+    height: 20px;
+}
+
+form p textarea {
     height: 100px;
     resize: none;
-    border: none;
-    background-color: #E6EFFA;
 }
 
-/* Styles pour les boutons de soumission du formulaire */
-p button[type='submit'] {
+form p button[type='submit'] {
     border: none;
     border-radius: 10px;
     padding: 2%;
@@ -132,42 +144,49 @@ p button[type='submit'] {
     color: white;
 }
 
-/* Styles pour le survol des boutons */
-p button:hover {
+form p button:hover {
     background-color: #E67E22;
 }
 
-/* Styles pour le survol des liens de navigation */
-nav a:hover {
-    border-bottom: solid 3px #323E6E;
-}
-
-/* Styles pour le focus sur les liens de navigation */
-nav a:focus {
-    border-bottom: solid 3px #323E6E;
-}
-
-/* Styles pour le contenu du message */
-.content-message {
+/* Styles pour les messages */
+.content-message,
+.error-message,
+.error-value,
+.success-message {
     text-align: center;
+    padding: 1rem;
+    border-radius: 0.25rem;
+    margin-bottom: 1rem;
+}
+
+.content-message {
     font-size: 1.2em;
     color: red;
-    font-weight: bold;
     margin: 10px 10px 100px 10px;
 }
 
-/* Styles pour le profil */
-
-main {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 80vh;
+.error-message,
+.error-value {
+    color: #721c24;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
 }
 
+.success-message {
+    color: #155724;
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+}
+
+.error-value {
+    padding: 0.1rem;
+    width: 80%;
+    margin: auto;
+}
+
+/* Styles pour le profil */
 .content-profil {
-    background-color: #ffffff;
+    background-color: #FFF;
     border-radius: 10px;
     padding: 20px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
@@ -191,54 +210,66 @@ main {
     text-decoration: underline;
 }
 
-.error-message {
-    text-align: center;
-    color: #721c24;
-    background-color: #f8d7da;
-    border: 1px solid #f5c6cb;
-    border-radius: 0.25rem;
-    padding: 1rem;
+/* Styles spécifiques à la page de confirmation */
+.content-mdp {
+    padding: 20px;
+    border: 1px solid #ced4da;
+    border-radius: 10px;
+    background-color: #FFF;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.content-mdp form {
+    display: grid;
+    grid-template-columns: 1fr;
+}
+
+.content-mdp form div.error-value {
     margin-bottom: 1rem;
 }
 
-.error-value {
-    text-align: center;
-        color: #721c24;
-        background-color: #f8d7da;
-        border: 1px solid #f5c6cb;
-        border-radius: 0.25rem;
-        padding: 0.1rem;
-        width: 80%;
-        margin: auto;
+.content-mdp form input {
+    margin-bottom: 10px;
 }
 
-.success-message {
-    color: #155724;
-    background-color: #d4edda;
-    border: 1px solid #c3e6cb;
-    border-radius: 0.25rem;
-    padding: 1rem;
-    margin-bottom: 1rem;
+/* Styles pour les boutons */
+.content-mdp form input[type="submit"] {
+    font-weight: 400;
+    color: #fff;
     text-align: center;
+    background-color: #ff7f50;
+    border: 1px solid #ff7f50;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    border-radius: 0.25rem;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.content-mdp form input[type="submit"]:hover {
+    background-color: #ef9445;
+    border-color: #ef9445;
+}
+
+.content-mdp h1 {
+    margin-bottom: 20px;
 }
 
 /* Styles pour le footer */
-
 footer {
     display: flex;
     justify-content: space-around;
     min-height: 15vh;
     align-items: center;
-    /* background-color: #d8e8fb; */
-    /* margin-top: 50px; */
 }
 
-ul {
+footer ul {
     display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
 footer ul li {
-    list-style-type: none;
     margin: 10px;
 }
 
@@ -249,4 +280,94 @@ footer ul li a {
 
 footer p {
     font-size: 0.9em;
+}
+
+/* Media Queries */
+
+/* Moyens écrans (tablettes) */
+@media screen and (max-width:1000px) {
+    nav {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    nav ul {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    nav ul li {
+        margin-right: 0;
+        padding: 5px 0;
+    }
+
+    form fieldset {
+        min-width: 60%;
+    }
+
+    form fieldset legend {
+        font-size: 1.5em;
+    }
+
+    .content-profil {
+        padding: 15px;
+    }
+
+    .content-mdp {
+        padding: 15px;
+    }
+}
+
+/* Petits écrans (mobiles) */
+@media screen and (max-width: 550px) {
+    nav {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    nav ul {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    nav ul li {
+        margin-right: 0;
+        padding: 5px 0;
+    }
+
+    nav a {
+        font-size: 1.2em;
+    }
+
+    form fieldset {
+        width: 80%;
+    }
+
+    form fieldset legend {
+        font-size: 1.2em;
+    }
+
+    form p input,
+    form p textarea,
+    .content-mdp form input[type="submit"] {
+        width: 80%;
+        font-size: 0.9em;
+    }
+
+    .content-profil {
+        padding: 10px;
+    }
+
+    .content-mdp {
+        padding: 10px;
+    }
+
+    footer ul {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    footer ul li {
+        margin: 5px 0;
+    }
 }

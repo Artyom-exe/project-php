@@ -78,8 +78,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 } else {
                     $errorMessage = $formMessage['code_incorrect'];
                 }
-            } else {
-                $errorMessage = $formMessage["envoi_echec"];
             }
         }
     }

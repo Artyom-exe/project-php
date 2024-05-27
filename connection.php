@@ -20,7 +20,7 @@ require_once __DIR__ . DS . 'app' . DS . 'controllers' . DS . 'connectionControl
 
     <?php if (!empty($errorMessage)) : ?>
         <div class="error-message">
-            <?= htmlspecialchars($errorMessage ?? "", ENT_QUOTES, 'UTF-8') ?>
+            <?= htmlspecialchars($errorMessage, ENT_QUOTES, 'UTF-8') ?>
         </div>
     <?php endif; ?>
 
@@ -29,23 +29,23 @@ require_once __DIR__ . DS . 'app' . DS . 'controllers' . DS . 'connectionControl
             <legend>Connexion</legend>
             <p>
                 <label for="pseudo">Pseudo&nbsp;:</label><br>
-                <input type="text" name="pseudo" value="<?= htmlspecialchars($valeursEchappees['pseudo'] ?? "") ?>" /><br>
+                <input type="text" name="pseudo" value="<?= htmlspecialchars($valeursEchappees['pseudo'] ?? "", ENT_QUOTES, 'UTF-8') ?>" /><br>
             </p>
 
             <?php if (!empty($errors['pseudo'])) : ?>
-                <div class="error-value"> <?= $errors['pseudo'] ?> </div>
+                <div class="error-value"> <?= htmlspecialchars($errors['pseudo'], ENT_QUOTES, 'UTF-8') ?> </div>
             <?php endif; ?>
             <p>
                 <label for="motDePasse">Mot de passe&nbsp;:</label><br>
-                <input type="password" id="motDePasse" name="motDePasse" value="<?= htmlspecialchars($valeursEchappees['motDePasse'] ?? "") ?>" /><br>
+                <input type="password" id="motDePasse" name="motDePasse" value="<?= htmlspecialchars($valeursEchappees['motDePasse'] ?? "", ENT_QUOTES, 'UTF-8') ?>" /><br>
             </p>
 
             <?php if (!empty($errors['motDePasse'])) : ?>
-                <div class="error-value"> <?= $errors['motDePasse'] ?> </div>
+                <div class="error-value"> <?= htmlspecialchars($errors['motDePasse'], ENT_QUOTES, 'UTF-8') ?> </div>
             <?php endif; ?>
 
             <p>
-                <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>">
                 <button type="submit" id="submitBtn">Se connecter</button>
             </p>
             <p id="maCible"><a href="/register.php">S'inscrire</a></p>

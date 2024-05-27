@@ -24,28 +24,38 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'components' . DIRECTORY_SEPARATOR 
 ?>
 <div class="container">
 
-    <h1>Confirme ton email</h1>
+    <?php if (!empty($errorMessage)) : ?>
+        <div class="error-message">
+            <?= htmlspecialchars($errorMessage, ENT_QUOTES, 'UTF-8') ?>
+        </div>
+    <?php endif; ?>
+    <main>
+        <div class="content-mdp">
+            <h1>Confirme ton email</h1>
 
-    <div class="content-message">
-        <?= htmlspecialchars($successMessage ?? "", ENT_QUOTES, 'UTF-8') ?>
-        <?= htmlspecialchars($errorMessage ?? "", ENT_QUOTES, 'UTF-8') ?>
-    </div>
+            <!-- Formulaire de vérification de code -->
+            <form method="POST" action="">
+                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>">
+                <input type="hidden" name="form_code" value="formVerificationIdentitie">
+                <label for="verification_code">Code de vérification :</label>
+                <input type="text" id="verification_code" name="verification_code" required>
 
-    <!-- Formulaire de vérification de code -->
-    <form method="POST" action="">
-        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
-        <input type="hidden" name="form_code" value="formVerificationIdentitie">
-        <label for="verification_code">Code de vérification :</label>
-        <input type="text" id="verification_code" name="verification_code" required>
-        <?= htmlspecialchars($errors['verification_code'] ?? "", ENT_QUOTES, 'UTF-8') ?>
-        <input type="submit" value="Soumettre">
-    </form>
+                <?php if (!empty($errors['verification_code'])) : ?>
+                    <div class="error-value">
+                        <?= htmlspecialchars($errors['verification_code'], ENT_QUOTES, 'UTF-8') ?>
+                    </div>
+                <?php endif; ?>
 
-    <!-- Formulaire pour demander un nouveau code -->
-    <form method="POST" action="">
-        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
-        <input type="hidden" name="form_request" value="formEnvoyerCode">
-        <input type="submit" value="Demander un nouveau code">
-    </form>
+                <input type="submit" value="Soumettre">
+            </form>
+
+            <!-- Formulaire pour demander un nouveau code -->
+            <form method="POST" action="">
+                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>">
+                <input type="hidden" name="form_request" value="formEnvoyerCode">
+                <input type="submit" value="Demander un nouveau code">
+            </form>
+        </div>
+    </main>
 </div>
 <?php require_once __DIR__ . DIRECTORY_SEPARATOR . 'components' . DIRECTORY_SEPARATOR . 'footer.php'; ?>

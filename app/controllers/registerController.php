@@ -65,7 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $stmt->execute();
 
                 // Affichage du message de succès
-                echo "<div style='text-align: center; font-size: 1.2em; color: green; font-weight: bold; margin: 10px;'> " . htmlspecialchars($formMessage["envoi_succes"], ENT_QUOTES, 'UTF-8') . "</div>";
+                $successMessageRegister = $formMessage['register_success'];
 
                 // Réinitialisation des valeurs échappées
                 $valeursEchappees = [];
@@ -73,9 +73,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 // Affichage de l'erreur en cas d'échec de l'insertion
                 echo "<div style='text-align: center; font-size: 1.2em; color: red; font-weight: bold; margin: 10px;'>Erreur lors de l'insertion dans la base de données : " . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8') . "</div>";
             }
-        } else {
-            // Affichage du message d'erreur si le formulaire contient des erreurs
-            echo "<div style='text-align: center; font-size: 1.2em; color: red; font-weight: bold; margin: 10px;'>" . htmlspecialchars($formMessage["envoi_echec"], ENT_QUOTES, 'UTF-8') . "</div>";
         }
     } else {
         // Affichage du message d'erreur pour un token CSRF invalide
