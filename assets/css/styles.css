@@ -1,11 +1,22 @@
+/* Importation de la police de caractères depuis Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
 
+/* Styles pour le corps de la page */
 body {
     margin: 0;
     padding: 0;
     font-family: 'Manrope';
-    background-color:#E6EFFA;
+    background-color: #E6EFFA;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
+
+div.container {
+    flex: 1;
+}
+
+/* Styles pour la barre de navigation */
 nav {
     display: flex;
     justify-content: space-between;
@@ -15,16 +26,22 @@ nav {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     height: 40px;
 }
+
+/* Styles pour les éléments de la liste de navigation */
 nav ul li {
     display: inline-block;
     padding: 10px;
     margin-right: 20px;
 }
+
+/* Styles pour le premier élément de la première liste de navigation */
 nav ul:first-child li:first-child {
     color: black;
     font-size: 2em;
     font-weight: bold;
 }
+
+/* Styles pour le span dans le premier élément de la première liste de navigation */
 nav ul:first-child li:first-child span {
     background-color: #323E6E;
     border-radius: 10px;
@@ -33,16 +50,22 @@ nav ul:first-child li:first-child span {
     font-weight: bold;
     padding: 3px;
 }
+
+/* Styles pour les liens dans la barre de navigation */
 nav a {
     text-decoration: none;
     font-size: 1.5em;
     color: black;
 }
+
+/* Styles pour le formulaire */
 form {
     display: flex;
     justify-content: center;
     align-items: center;
 }
+
+/* Styles pour le champ de formulaire */
 form fieldset {
     margin-top: 2%;
     padding: 1%;
@@ -53,27 +76,33 @@ form fieldset {
     width: 40%;
     display: flex;
     flex-direction: column;
-    justify-content:center;
+    justify-content: center;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
+
+/* Styles pour les paragraphes dans le champ de formulaire */
 form fieldset p {
     font-weight: bold;
 }
+
+/* Styles pour les libellés des champs de formulaire */
 form fieldset p label {
     text-align: left;
-    width : 80%;
-    display : inline-block;
+    width: 80%;
+    display: inline-block;
 }
-form fieldset p:nth-child(5) label {
-    margin-bottom: 1%;
-}
+
+/* Styles pour la légende du champ de formulaire */
 fieldset legend {
     border-radius: 10px;
     padding: 5px;
-    background-color:#323E6E;
+    background-color: #323E6E;
     font-size: 2em;
     color: white;
     font-weight: bold;
 }
+
+/* Styles pour les champs de saisie de formulaire */
 p input {
     height: 20px;
     width: 80%;
@@ -81,56 +110,143 @@ p input {
     border: none;
     background-color: #E6EFFA;
 }
+
+/* Styles pour la zone de texte du formulaire */
 p textarea {
     border-radius: 5px;
     width: 80%;
     height: 100px;
     resize: none;
     border: none;
-    background-color:#E6EFFA ;
+    background-color: #E6EFFA;
 }
+
+/* Styles pour les boutons de soumission du formulaire */
 p button[type='submit'] {
     border: none;
     border-radius: 10px;
     padding: 2%;
-    background-color:#F8883C;
+    background-color: #F8883C;
     font-size: 1em;
     font-weight: bold;
     color: white;
 }
 
+/* Styles pour le survol des boutons */
 p button:hover {
     background-color: #E67E22;
 }
+
+/* Styles pour le survol des liens de navigation */
 nav a:hover {
     border-bottom: solid 3px #323E6E;
 }
+
+/* Styles pour le focus sur les liens de navigation */
 nav a:focus {
     border-bottom: solid 3px #323E6E;
 }
 
+/* Styles pour le contenu du message */
 .content-message {
-    text-align: center; 
-    font-size: 1.2em; 
-    color: red; 
-    font-weight: bold; 
+    text-align: center;
+    font-size: 1.2em;
+    color: red;
+    font-weight: bold;
     margin: 10px 10px 100px 10px;
 }
 
-.enSavoirPlus
-{
-    overflow: hidden;
-    display: inline-block;
-    max-height: 10px;
-    transition: max-height ease-out 0.5s;
-}
-.derouler
-{
-    max-height: 600px;
-}
-.active {
-    border-bottom: solid 3px #323E6E;
+/* Styles pour le profil */
+
+main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
 }
 
+.content-profil {
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
 
+.content-profil h2 {
+    margin-top: 0;
+}
 
+.content-profil p {
+    margin-bottom: 20px;
+}
+
+.content-profil .logout-link {
+    color: #ff7f50;
+    text-decoration: none;
+    display: block;
+}
+
+.logout-link:hover {
+    text-decoration: underline;
+}
+
+.error-message {
+    text-align: center;
+    color: #721c24;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 0.25rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.error-value {
+    text-align: center;
+        color: #721c24;
+        background-color: #f8d7da;
+        border: 1px solid #f5c6cb;
+        border-radius: 0.25rem;
+        padding: 0.1rem;
+        width: 80%;
+        margin: auto;
+}
+
+.success-message {
+    color: #155724;
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+    border-radius: 0.25rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+/* Styles pour le footer */
+
+footer {
+    display: flex;
+    justify-content: space-around;
+    min-height: 15vh;
+    align-items: center;
+    /* background-color: #d8e8fb; */
+    /* margin-top: 50px; */
+}
+
+ul {
+    display: flex;
+}
+
+footer ul li {
+    list-style-type: none;
+    margin: 10px;
+}
+
+footer ul li a {
+    text-decoration: none;
+    color: black;
+}
+
+footer p {
+    font-size: 0.9em;
+}

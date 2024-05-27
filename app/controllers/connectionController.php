@@ -1,30 +1,48 @@
 <?php
-require_once dirname(__DIR__, 2) . DS . 'core' . DS . 'formGestion.php';
-require_once dirname(__DIR__, 1) . DS . 'models' . DS . 'authentificationModel.php';
-require_once dirname(__DIR__, 2) . DS . 'core' . DS . 'messagesGestion.php';
-require_once dirname(__DIR__, 2) . DS . 'core' . DS . 'dataBaseFunctions.php';
-require_once dirname(__DIR__, 2) . DS . 'core' . DS . 'profilGestion.php';
-require_once dirname(__DIR__, 2) . DS . 'core' . DS . 'authentificationGestion.php';
 
-if (isset($_SESSION['id']) && est_connecte($_SESSION['id'])) {
-    header("location: /profil.php");
+// Inclusion des fichiers nécessaires
+require_once dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'formGestion.php';
+require_once dirname(__DIR__, 1) . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'authentificationModel.php';
+require_once dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'messagesGestion.php';
+require_once dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'dataBaseFunctions.php';
+require_once dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'profilGestion.php';
+require_once dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'authentificationGestion.php';
+
+// Initialisation de la session
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
 }
 
-$errors = [];
-$valeursEchappees = [];
+// Génération du token CSRF s'il n'existe pas déjà
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
 
-$champsConfig = obtenir_ChampsConfigsAuthentification(false);
+// Redirection si déjà connecté
+if (isset($_SESSION['id']) && est_connecte($_SESSION['id'])) {
+    header("location: /profil.php");
+    exit();
+}
 
-$formMessage = importer_messages('formMessages.json');
+$errors = []; // Tableau pour stocker les erreurs de formulaire
+$valeursEchappees = []; // Tableau pour stocker les valeurs échappées des champs de formulaire
 
-if (($_SERVER["REQUEST_METHOD"] === "POST")) {
+$champsConfig = obtenir_ChampsConfigsAuthentification(false); // Configuration des champs de formulaire
 
-    gestion_formulaire($formMessage, $champsConfig, $errors, $valeursEchappees);
+$formMessage = importer_messages('formMessages.json'); // Importation des messages du formulaire
+
+// Vérification de la méthode de la requête
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+
+    // Vérification du token CSRF
+    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+        $errors['csrf_token'] = "Token CSRF invalide.";
+    }
+
+    gestion_formulaire($formMessage, $champsConfig, $errors, $valeursEchappees); // Gestion du formulaire
 
     if (empty($errors)) {
-
         try {
-
             $pdo = connexion_db();
 
             $pseudo = $_POST['pseudo'];
@@ -36,17 +54,12 @@ if (($_SERVER["REQUEST_METHOD"] === "POST")) {
 
             $stmt->bindValue(':pseudo', $pseudo, PDO::PARAM_STR);
 
-            $estValide = $stmt->execute();
-        } catch (PDOException $e) {
-            gerer_exceptions($e);
-        }
-
-        if (isset($estValide) && $estValide !== false) {
-
+            $stmt->execute();
             $utilisateur = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if ($utilisateur && password_verify($motDePasse, $utilisateur['uti_motdepasse'])) {
 
+                // Informations pour vérification d'identité
                 $verifierIdentite = [
                     "utiId" => $utilisateur['uti_id'],
                     "utiEmail" => $utilisateur['uti_email'],
@@ -56,7 +69,8 @@ if (($_SERVER["REQUEST_METHOD"] === "POST")) {
 
                 $_SESSION['verifierIdentite'] = $verifierIdentite;
 
-                if (!isset($utilisateur['uti_code_activation'])) {
+                // Redirection selon le statut du compte
+                if (empty($utilisateur['uti_code_activation'])) {
                     header("location: /confirm.php");
                     exit();
                 } else {
@@ -65,10 +79,10 @@ if (($_SERVER["REQUEST_METHOD"] === "POST")) {
                     exit();
                 }
             } else {
-                echo "<div style= 'text-align: center; font-size: 1.2em; color: red; font-weight: bold; margin: 10px;'> " . $formMessage["id-mdp-echec"] . "</div>";
+                $errorMessage = $formMessage['id-mdp-echec'];
             }
-        } else {
-            echo "<div style= 'text-align: center; font-size: 1.2em; color: red; font-weight: bold; margin: 10px;'> " . $formMessage["connection_echec"] . "</div>";
+        } catch (PDOException $e) {
+            gerer_exceptions($e);
         }
     }
 }

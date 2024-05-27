@@ -43,50 +43,44 @@ try {
 
 // Gérer les requêtes POST
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    // Vérifier le token CSRF
+    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+        $errorMessage = "Invalid CSRF token.";
+    } else {
+        // Renvoyer le code d'activation si demandé
+        if (isset($_POST['form_request'])) {
+            mail($destinataire, $sujet, $_SESSION['code']);
+        }
 
-    // Renvoyer le code d'activation si demandé
-    if (isset($_POST['form_request'])) {
-        mail($destinataire, $sujet, $_SESSION['code']);
-    }
+        // Vérifier le code d'activation s'il est soumis
+        if (isset($_POST['form_code'])) {
+            gestion_formulaire($formMessage, $champsConfig['form_code'], $errors, $valeursEchappees);
 
-    // Vérifier le code d'activation s'il est soumis
-    if (isset($_POST['form_code'])) {
-        gestion_formulaire($formMessage, $champsConfig['form_code'], $errors, $valeursEchappees);
+            if (empty($errors)) {
+                if (isset($valeursEchappees['verification_code']) && intval($valeursEchappees['verification_code']) === $_SESSION['code']) {
+                    try {
+                        $pdo = connexion_db();
+                        $requete = "UPDATE t_utilisateur_uti SET uti_compte_active = :compteActive WHERE uti_email = :email";
+                        $stmt = $pdo->prepare($requete);
+                        $stmt->bindValue(':compteActive', 1, PDO::PARAM_INT);
+                        $stmt->bindValue(':email', $_SESSION['verifierIdentite']['utiEmail'], PDO::PARAM_STR);
+                        $stmt->execute();
+                    } catch (\PDOException $e) {
+                        gerer_exceptions($e);
+                    }
 
-        if (empty($errors)) {
-            if (isset($valeursEchappees['verification_code']) && intval($valeursEchappees['verification_code']) === $_SESSION['code']) {
-                try {
-                    $pdo = connexion_db();
-                    $requete = "UPDATE t_utilisateur_uti SET uti_compte_active = :compteActive WHERE uti_email = :email";
-                    $stmt = $pdo->prepare($requete);
-                    $stmt->bindValue(':compteActive', 1, PDO::PARAM_INT);
-                    $stmt->bindValue(':email', $destinataire, PDO::PARAM_STR);
-                    $stmt->execute();
-                } catch (\PDOException $e) {
-                    gerer_exceptions($e);
+                    // Connecter l'utilisateur et rediriger
+                    connecter_utilisateur($_SESSION['verifierIdentite']['utiId']);
+                    $urlRedirection = $_SESSION['verifierIdentite']['urlRedirection'];
+                    header("Location: $urlRedirection");
+                    unset($_SESSION['verifierIdentite']);
+                    exit();
+                } else {
+                    $errorMessage = $formMessage['code_incorrect'];
                 }
-
-                // Connecter l'utilisateur et rediriger
-                connecter_utilisateur($_SESSION['verifierIdentite']['utiId']);
-                $urlRedirection = $_SESSION['verifierIdentite']['urlRedirection'];
-                header("Location: $urlRedirection");
-                unset($_SESSION['verifierIdentite']);
-
-                // Effacer les cookies de session s'ils sont utilisés
-
-                // if (ini_get("session.use_cookies")) {
-                //     $params = session_get_cookie_params();
-                //     setcookie(session_name(), '', time() - 42000, $params["path"], $params["domain"], $params["secure"], $params["httponly"]);
-                // }
-
-                // Bug => à corriger
-
-                exit();
             } else {
-                $errorMessage = $formMessage['code_incorrect'];
+                $errorMessage = $formMessage["envoi_echec"];
             }
-        } else {
-            $errorMessage = $formMessage["envoi_echec"];
         }
     }
 }

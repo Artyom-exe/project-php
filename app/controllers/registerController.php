@@ -1,63 +1,84 @@
 <?php
-require_once dirname(__DIR__, 2) . DS . 'core' . DS . 'formGestion.php';
-require_once dirname(__DIR__) . DS . 'models' . DS . 'authentificationModel.php';
-require_once dirname(__DIR__, 2) . DS . 'core' . DS . 'messagesGestion.php';
-require_once dirname(__DIR__, 2) . DS . 'private_data' . DS . 'dataConnectionDb.php';
-require_once dirname(__DIR__, 2) . DS . 'core' . DS . 'dataBaseFunctions.php';
-require_once dirname(__DIR__, 2) . DS . 'core' . DS . 'authentificationGestion.php';
+// Inclusion des fichiers nécessaires
+require_once dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'formGestion.php';
+require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'authentificationModel.php';
+require_once dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'messagesGestion.php';
+require_once dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'private_data' . DIRECTORY_SEPARATOR . 'dataConnectionDb.php';
+require_once dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'dataBaseFunctions.php';
+require_once dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'authentificationGestion.php';
 
-
-if (isset($_SESSION["id"]) && est_connecte($_SESSION["id"])) {
-    header("location: /profil.php");
+// Initialisation de la session
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
 }
 
-$errors = [];
-$valeursEchappees = [];
+// Génération du token CSRF
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
 
+// Redirection vers la page de profil si l'utilisateur est déjà connecté
+if (isset($_SESSION["id"]) && est_connecte($_SESSION["id"])) {
+    header("Location: /profil.php");
+    exit;
+}
+
+$errors = []; // Tableau pour stocker les erreurs de formulaire
+$valeursEchappees = []; // Tableau pour stocker les valeurs échappées des champs de formulaire
+
+// Récupération de la configuration des champs de formulaire
 $champsConfig = obtenir_ChampsConfigsAuthentification();
 
-$formMessage = $formMessage = importer_messages('formMessages.json');
+// Récupération des messages de formulaire
+$formMessage = importer_messages('formMessages.json');
 
+// Vérification de la soumission du formulaire
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    // Vérification du token CSRF
+    if (!empty($_POST['csrf_token']) && hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+        // Validation du formulaire et récupération des erreurs et des valeurs échappées
+        gestion_formulaire($formMessage, $champsConfig, $errors, $valeursEchappees);
 
-if (($_SERVER["REQUEST_METHOD"] === "POST")) {
+        // Vérification s'il n'y a pas d'erreurs dans le formulaire
+        if (empty($errors)) {
+            // Connexion à la base de données
+            $pdo = connexion_db();
 
-    gestion_formulaire($formMessage, $champsConfig, $errors, $valeursEchappees);
+            // Récupération des valeurs des champs
+            $pseudo = $valeursEchappees['pseudo'];
+            $motDePasse = password_hash($valeursEchappees['motDePasse'], PASSWORD_DEFAULT); // Hashage du mot de passe
+            $email = $valeursEchappees['email'];
 
-    if (empty($errors)) {
+            // Requête SQL pour insérer un nouvel utilisateur dans la base de données
+            $requete = "INSERT INTO t_utilisateur_uti (uti_pseudo, uti_motdepasse, uti_email) VALUES (:pseudo, :mot_de_passe, :email)";
 
-        // Après la validation du formulaire et avant d'afficher le message de succès
+            try {
+                // Préparation de la requête
+                $stmt = $pdo->prepare($requete);
 
-        $pdo = connexion_db();
+                // Liaison des valeurs aux paramètres de la requête
+                $stmt->bindParam(':pseudo', $pseudo);
+                $stmt->bindParam(':mot_de_passe', $motDePasse);
+                $stmt->bindParam(':email', $email);
 
-        // Création d'un nouvel utilisateur dans la base de données
-        $pseudo = $valeursEchappees['pseudo'];
-        $motDePasse = password_hash($valeursEchappees['motDePasse'], PASSWORD_DEFAULT); // Hashage du mot de passe
-        $email = $valeursEchappees['email'];
+                // Exécution de la requête
+                $stmt->execute();
 
-        // Requête SQL d'insertion dans la base de données
-        $requete = "INSERT INTO t_utilisateur_uti (uti_pseudo, uti_motdepasse, uti_email) VALUES (:pseudo, :mot_de_passe, :email)";
+                // Affichage du message de succès
+                echo "<div style='text-align: center; font-size: 1.2em; color: green; font-weight: bold; margin: 10px;'> " . htmlspecialchars($formMessage["envoi_succes"], ENT_QUOTES, 'UTF-8') . "</div>";
 
-        try {
-            // Préparation de la requête
-            $stmt = $pdo->prepare($requete);
-
-            // Liaison des paramètres
-            $stmt->bindParam(':pseudo', $pseudo);
-            $stmt->bindParam(':mot_de_passe', $motDePasse);
-            $stmt->bindParam(':email', $email);
-
-            // Exécution de la requête
-            $stmt->execute();
-
-            // Affichage du message de succès
-            echo "<div style= 'text-align: center; font-size: 1.2em; color: green; font-weight: bold; margin: 10px;'> " . $formMessage["envoi_succes"] . "</div>";
-
-            $valeursEchappees = [];
-        } catch (PDOException $e) {
-            // Affichage de l'erreur en cas d'échec de l'insertion
-            echo "Erreur lors de l'insertion dans la base de données : " . $e->getMessage();
+                // Réinitialisation des valeurs échappées
+                $valeursEchappees = [];
+            } catch (PDOException $e) {
+                // Affichage de l'erreur en cas d'échec de l'insertion
+                echo "<div style='text-align: center; font-size: 1.2em; color: red; font-weight: bold; margin: 10px;'>Erreur lors de l'insertion dans la base de données : " . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8') . "</div>";
+            }
+        } else {
+            // Affichage du message d'erreur si le formulaire contient des erreurs
+            echo "<div style='text-align: center; font-size: 1.2em; color: red; font-weight: bold; margin: 10px;'>" . htmlspecialchars($formMessage["envoi_echec"], ENT_QUOTES, 'UTF-8') . "</div>";
         }
     } else {
-        echo "<div style= 'text-align: center; font-size: 1.2em; color: red; font-weight: bold; margin: 10px;'> " . $formMessage["envoi_echec"] . "</div>";
+        // Affichage du message d'erreur pour un token CSRF invalide
+        echo "<div style='text-align: center; font-size: 1.2em; color: red; font-weight: bold; margin: 10px;'>Token CSRF invalide</div>";
     }
 }

@@ -1,16 +1,20 @@
 <?php
 function envoie_mail(array $valeursEchappees): void
 {
-
-    $destinataire = "th.lambot@hotmail.fr";
-    $sujet = "Formulaire";
-    $message = implode("\r\n", $valeursEchappees);
-
-    if (mail($destinataire, $sujet, $message)) {
-        echo
-        "<div style= 'text-align: center; font-size: 1.2em; color: green; font-weight: bold; margin: 10px;'> " . "Le courriel a été envoyé avec succès." . "</div>";
-    } else {
-        echo
-        "<div style= 'text-align: center; font-size: 1.2em; color: green; font-weight: bold; margin: 10px;'> " . "L'envoi du courriel a échoué." . "</div>";
+    // Destinataire de l'email
+    $destinataire = $valeursEchappees["user_mail"];
+    // Sujet de l'email
+    $sujet = "Formulaire de contact";
+    // Construction du message en incluant les libellés des champs et leurs valeurs
+    $message = "Nouveau message du formulaire :\n";
+    foreach ($valeursEchappees as $champ => $valeur) {
+        $message .= ucfirst($champ) . ": " . $valeur . "\n";
     }
+
+    // Échapper les caractères spéciaux dans le sujet et le message
+    $sujet = htmlspecialchars($sujet);
+    $message = htmlspecialchars($message);
+
+    // Envoyer l'email
+    mail($destinataire, $sujet, $message);
 };

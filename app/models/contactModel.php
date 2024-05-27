@@ -1,8 +1,9 @@
 <?php
 
+// Fonction pour obtenir les configurations des champs pour le formulaire de contact
 function obtenir_ChampsConfigsContact(): array
 {
-
+    // Retourner un tableau associatif contenant les configurations des champs
     return [
         'user_lastname' => [
             'requis' => true,
