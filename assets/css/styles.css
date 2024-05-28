@@ -74,7 +74,7 @@ main {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 80vh;
+    min-height: 80vh;
 }
 
 /* Styles pour les formulaires */
@@ -186,28 +186,117 @@ form p button:hover {
 
 /* Styles pour le profil */
 .content-profil {
+    width: 100%;
+    max-width: 600px;
+    margin: 30px auto;
+    padding: 20px;
     background-color: #FFF;
     border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    order: 1;
 }
 
 .content-profil h2 {
     margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #323E6E;
 }
 
 .content-profil p {
     margin-bottom: 20px;
+    font-size: 16px;
+    color: #495057;
 }
 
 .content-profil .logout-link {
     color: #ff7f50;
     text-decoration: none;
-    display: block;
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    background-color: #f8f9fa;
+    transition: background-color 0.3s ease;
 }
 
-.logout-link:hover {
-    text-decoration: underline;
+.content-profil .logout-link:hover {
+    background-color: #ff7f50;
+    color: #fff;
+    text-decoration: none;
+}
+
+/* Styles pour le formulaire reset mdp/email */
+.form-reset {
+    width: 100%;
+    max-width: 600px;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: #FFF;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    order:2;
+}
+
+.form-reset form {
+    display: grid;
+    grid-template-columns: 1fr;
+}
+
+.form-reset h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #323E6E;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #495057;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: #f8f9fa;
+    transition: border-color 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #80bdff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.btn-primary {
+    display: inline-block;
+    width: 100%;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #323E6E;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
 }
 
 /* Styles spécifiques à la page de confirmation */
@@ -312,6 +401,10 @@ footer p {
     .content-profil {
         padding: 15px;
     }
+    
+    .form-reset {
+        padding: 15px;
+    }
 
     .content-mdp {
         padding: 15px;
@@ -360,6 +453,19 @@ footer p {
 
     .content-mdp {
         padding: 10px;
+    }
+
+    .form-reset {
+        padding: 10px;
+    }
+
+    .form-control {
+        padding: 8px;
+    }
+
+    .btn-primary {
+        padding: 8px 16px;
+        font-size: 14px;
     }
 
     footer ul {

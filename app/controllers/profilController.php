@@ -1,6 +1,8 @@
 <?php
 require_once dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'dataBaseFunctions.php';
 require_once dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'authentificationGestion.php';
+require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'resetMdpEmailModel.php';
+require_once dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'messagesGestion.php';
 
 // Initialisation de la session
 if (session_status() == PHP_SESSION_NONE) {
@@ -11,6 +13,11 @@ if (session_status() == PHP_SESSION_NONE) {
 if (!isset($_SESSION['id']) || !est_connecte($_SESSION['id'])) {
     header("Location: /connection.php"); // Redirection vers la page de connexion si l'utilisateur n'est pas connecté
     exit(); // Arrêt du script pour éviter toute exécution supplémentaire
+}
+
+// Génération du token CSRF
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
 
 try {
@@ -45,4 +52,20 @@ try {
 } catch (Exception $e) {
     // Gestion des autres exceptions
     echo "Erreur : " . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8');
+}
+
+$errors = []; // Tableau pour stocker les erreurs de formulaire
+$valeursEchappees = []; // Tableau pour stocker les valeurs échappées des champs de formulaire
+
+// Récupération de la configuration des champs de formulaire
+$champsConfig = obtenir_ChampsConfigsProfilReset();
+
+// Récupération des messages de formulaire
+$formMessage = importer_messages('formMessages.json');
+
+// Vérification de la soumission du formulaire
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    // Vérification du token CSRF
+    if (!empty($_POST['csrf_token']) && hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+    }
 }
