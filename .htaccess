@@ -1,0 +1,7 @@
+RewriteEngine On
+
+# Condition : la requête doit être composée de "/public/".
+RewriteCond %{REQUEST_URI} !/public/
+
+# Rediriger vers "index.php" si la condition précédente n'est pas respectée.
+RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
