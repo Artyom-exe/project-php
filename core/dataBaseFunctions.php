@@ -1,15 +1,16 @@
 <?php
 // Inclure le fichier de configuration de la base de données
-require_once dirname(__DIR__) . DS . 'private_data' . DS . 'dataConnectionDb.php';
+require_once (__DIR__) . DS . 'config_helper.php';
 
 // Fonction pour établir une connexion à la base de données
 function connexion_db(): ?PDO
 {
-    // Paramètres de connexion à la base de données
-    $nomDuServeur = "localhost";
-    $nomUtilisateur = "root";
-    $motDePasse = "";
-    $nomBDD = "project_php";
+    $config = getConfig();
+
+    $nomDuServeur = $config['nomDuServeur'];
+    $nomUtilisateur = $config['nomUtilisateur'];
+    $motDePasse = $config['motDePasse'];
+    $nomBDD = $config['nomBDD'];
 
     try {
         // Création d'une nouvelle instance PDO pour la connexion à la base de données

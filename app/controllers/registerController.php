@@ -3,19 +3,9 @@
 require_once dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'formGestion.php';
 require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'authentificationModel.php';
 require_once dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'messagesGestion.php';
-require_once dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'private_data' . DIRECTORY_SEPARATOR . 'dataConnectionDb.php';
 require_once dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'dataBaseFunctions.php';
 require_once dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'authentificationGestion.php';
 
-// Initialisation de la session
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
-
-// Génération du token CSRF
-if (empty($_SESSION['csrf_token'])) {
-    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-}
 
 // Redirection vers la page de profil si l'utilisateur est déjà connecté
 if (isset($_SESSION["id"]) && est_connecte($_SESSION["id"])) {
@@ -35,7 +25,9 @@ $formMessage = importer_messages('formMessages.json');
 // Vérification de la soumission du formulaire
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // Vérification du token CSRF
-    if (!empty($_POST['csrf_token']) && hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+        $errors['csrf_token'] = "Token CSRF invalide.";
+    } else {
         // Validation du formulaire et récupération des erreurs et des valeurs échappées
         gestion_formulaire($formMessage, $champsConfig, $errors, $valeursEchappees);
 
@@ -74,8 +66,5 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 echo "<div style='text-align: center; font-size: 1.2em; color: red; font-weight: bold; margin: 10px;'>Erreur lors de l'insertion dans la base de données : " . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8') . "</div>";
             }
         }
-    } else {
-        // Affichage du message d'erreur pour un token CSRF invalide
-        echo "<div style='text-align: center; font-size: 1.2em; color: red; font-weight: bold; margin: 10px;'>Token CSRF invalide</div>";
     }
 }

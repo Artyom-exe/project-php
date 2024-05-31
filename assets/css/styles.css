@@ -22,7 +22,7 @@ nav {
     justify-content: space-between;
     align-items: center;
     background-color: #FFF;
-    padding: 20px;
+    padding: 1rem;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
@@ -35,12 +35,10 @@ nav ul {
 
 nav ul li {
     display: inline-block;
-    padding: 10px;
-    margin-right: 20px;
+    margin-right: 1rem;
     font-size: 0.9em;
 }
 
-/* Styles pour le logo */
 nav ul:first-child li:first-child {
     color: black;
     font-size: 2em;
@@ -49,18 +47,18 @@ nav ul:first-child li:first-child {
 
 nav ul:first-child li:first-child span {
     background-color: #323E6E;
-    border-radius: 10px;
+    border-radius: 0.25rem;
     color: white;
     font-size: 1em;
     font-weight: bold;
-    padding: 3px;
+    padding: 0.3rem;
 }
 
-/* Styles pour les liens de navigation */
 nav a {
     text-decoration: none;
     font-size: 1.5em;
     color: black;
+    padding: 0.5rem;
 }
 
 nav a:hover,
@@ -86,11 +84,11 @@ form {
 
 form fieldset {
     margin-top: 2%;
-    padding: 1%;
+    padding: 1rem;
     text-align: center;
     background-color: #FBFCFE;
     border: 3px solid #FBFCFE;
-    border-radius: 10px;
+    border-radius: 0.5rem;
     min-width: 40%;
     display: flex;
     flex-direction: column;
@@ -99,8 +97,8 @@ form fieldset {
 }
 
 form fieldset legend {
-    border-radius: 10px;
-    padding: 5px;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
     background-color: #323E6E;
     font-size: 2em;
     color: white;
@@ -120,13 +118,18 @@ form fieldset p label {
 form p input,
 form p textarea {
     width: 80%;
-    border-radius: 5px;
-    border: none;
+    border-radius: 0.25rem;
+    border: 1px solid #ced4da;
     background-color: #E6EFFA;
+    padding: 0.5rem;
+    box-sizing: border-box;
 }
 
-form p input {
-    height: 20px;
+form p input:focus,
+form p textarea:focus {
+    border-color: #80bdff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
 
 form p textarea {
@@ -136,15 +139,17 @@ form p textarea {
 
 form p button[type='submit'] {
     border: none;
-    border-radius: 10px;
-    padding: 2%;
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
     background-color: #F8883C;
-    font-size: 1em;
+    font-size: 1rem;
     font-weight: bold;
     color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-form p button:hover {
+form p button[type='submit']:hover {
     background-color: #E67E22;
 }
 
@@ -189,24 +194,23 @@ form p button:hover {
     width: 100%;
     max-width: 600px;
     margin: 30px auto;
-    padding: 20px;
+    padding: 1rem;
     background-color: #FFF;
-    border-radius: 10px;
+    border-radius: 0.5rem;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     text-align: center;
-    order: 1;
 }
 
 .content-profil h2 {
     margin-top: 0;
-    margin-bottom: 20px;
-    font-size: 24px;
+    margin-bottom: 1.25rem;
+    font-size: 1.5rem;
     color: #323E6E;
 }
 
 .content-profil p {
-    margin-bottom: 20px;
-    font-size: 16px;
+    margin-bottom: 1.25rem;
+    font-size: 1rem;
     color: #495057;
 }
 
@@ -214,11 +218,11 @@ form p button:hover {
     color: #ff7f50;
     text-decoration: none;
     display: inline-block;
-    padding: 10px 20px;
-    font-size: 16px;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
     font-weight: bold;
     border: none;
-    border-radius: 4px;
+    border-radius: 0.25rem;
     background-color: #f8f9fa;
     transition: background-color 0.3s ease;
 }
@@ -234,11 +238,10 @@ form p button:hover {
     width: 100%;
     max-width: 600px;
     margin: 30px auto;
-    padding: 20px;
+    padding: 1rem;
     background-color: #FFF;
-    border-radius: 10px;
+    border-radius: 0.5rem;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    order:2;
 }
 
 .form-reset form {
@@ -247,28 +250,28 @@ form p button:hover {
 }
 
 .form-reset h2 {
-    margin-bottom: 20px;
-    font-size: 24px;
+    margin-bottom: 1.25rem;
+    font-size: 1.5rem;
     color: #323E6E;
     text-align: center;
 }
 
 .form-group {
-    margin-bottom: 15px;
+    margin-bottom: 0.75rem;
 }
 
 .form-group label {
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 0.25rem;
     font-weight: bold;
     color: #495057;
 }
 
 .form-control {
     width: 100%;
-    padding: 10px;
+    padding: 0.5rem;
     border: 1px solid #ced4da;
-    border-radius: 4px;
+    border-radius: 0.25rem;
     box-sizing: border-box;
     background-color: #f8f9fa;
     transition: border-color 0.3s ease;
@@ -283,13 +286,13 @@ form p button:hover {
 .btn-primary {
     display: inline-block;
     width: 100%;
-    padding: 10px 20px;
-    font-size: 16px;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
     font-weight: bold;
     color: #fff;
     background-color: #323E6E;
     border: none;
-    border-radius: 4px;
+    border-radius: 0.25rem;
     cursor: pointer;
     text-align: center;
     transition: background-color 0.3s ease;
@@ -301,9 +304,9 @@ form p button:hover {
 
 /* Styles spécifiques à la page de confirmation */
 .content-mdp {
-    padding: 20px;
+    padding: 1rem;
     border: 1px solid #ced4da;
-    border-radius: 10px;
+    border-radius: 0.5rem;
     background-color: #FFF;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
@@ -318,10 +321,9 @@ form p button:hover {
 }
 
 .content-mdp form input {
-    margin-bottom: 10px;
+    margin-bottom: 0.5rem;
 }
 
-/* Styles pour les boutons */
 .content-mdp form input[type="submit"] {
     font-weight: 400;
     color: #fff;
@@ -340,7 +342,7 @@ form p button:hover {
 }
 
 .content-mdp h1 {
-    margin-bottom: 20px;
+    margin-bottom: 1.25rem;
 }
 
 /* Styles pour le footer */
@@ -359,7 +361,7 @@ footer ul {
 }
 
 footer ul li {
-    margin: 10px;
+    margin: 0.5rem;
 }
 
 footer ul li a {
@@ -374,7 +376,7 @@ footer p {
 /* Media Queries */
 
 /* Moyens écrans (tablettes) */
-@media screen and (max-width:1000px) {
+@media screen and (max-width: 1000px) {
     nav {
         flex-direction: column;
         align-items: flex-start;
@@ -387,7 +389,7 @@ footer p {
 
     nav ul li {
         margin-right: 0;
-        padding: 5px 0;
+        padding: 0.5rem 0;
     }
 
     form fieldset {
@@ -395,19 +397,19 @@ footer p {
     }
 
     form fieldset legend {
-        font-size: 1.5em;
+        font-size: 1.5rem;
     }
 
     .content-profil {
-        padding: 15px;
+        padding: 1rem;
     }
-    
+
     .form-reset {
-        padding: 15px;
+        padding: 1rem;
     }
 
     .content-mdp {
-        padding: 15px;
+        padding: 1rem;
     }
 }
 
@@ -425,11 +427,11 @@ footer p {
 
     nav ul li {
         margin-right: 0;
-        padding: 5px 0;
+        padding: 0.5rem 0;
     }
 
     nav a {
-        font-size: 1.2em;
+        font-size: 1.2rem;
     }
 
     form fieldset {
@@ -437,35 +439,35 @@ footer p {
     }
 
     form fieldset legend {
-        font-size: 1.2em;
+        font-size: 1.2rem;
     }
 
     form p input,
     form p textarea,
     .content-mdp form input[type="submit"] {
         width: 80%;
-        font-size: 0.9em;
+        font-size: 0.9rem;
     }
 
     .content-profil {
-        padding: 10px;
+        padding: 0.5rem;
     }
 
     .content-mdp {
-        padding: 10px;
+        padding: 0.5rem;
     }
 
     .form-reset {
-        padding: 10px;
+        padding: 0.5rem;
     }
 
     .form-control {
-        padding: 8px;
+        padding: 0.5rem;
     }
 
     .btn-primary {
-        padding: 8px 16px;
-        font-size: 14px;
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
     }
 
     footer ul {
@@ -474,6 +476,6 @@ footer p {
     }
 
     footer ul li {
-        margin: 5px 0;
+        margin: 0.5rem 0;
     }
 }

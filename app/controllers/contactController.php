@@ -26,7 +26,10 @@ $formMessage = importer_messages('formMessages.json');
 // Vérification de la méthode de requête POST
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // Vérification du token CSRF
-    if (!empty($_POST['csrf_token']) && hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+    // Vérification du token CSRF
+    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+        $errors['csrf_token'] = "Token CSRF invalide.";
+    } else {
         // Gestion du formulaire pour la validation et l'échappement des données
         gestion_formulaire($formMessage, $champsConfig, $errors, $valeursEchappees);
 
@@ -39,8 +42,5 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             // Réinitialisation des valeurs échappées pour éviter la réutilisation
             $valeursEchappees = [];
         }
-    } else {
-        // Token CSRF invalide, ajouter une erreur
-        $errors[] = 'Invalid CSRF token';
     }
 }
