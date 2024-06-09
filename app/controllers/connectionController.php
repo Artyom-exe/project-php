@@ -89,7 +89,7 @@ function insert()
                         $_SESSION['verifierIdentite'] = $verifierIdentite;
 
                         // Redirection selon le statut du compte
-                        if ($utilisateur['uti_compte_active'] === 0) {
+                        if (intval($utilisateur['uti_compte_active']) === 0) {
                             header("location: /confirm");
                             exit();
                         } else {
