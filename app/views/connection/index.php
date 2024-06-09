@@ -1,26 +1,14 @@
 <?php
-require_once __DIR__ . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'constantes.php';
-
-// Initialisation de la session
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
-// Génération du token CSRF
-if (empty($_SESSION['csrf_token'])) {
-    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-}
-
-$metaDescription = "Inscription";
-$pageTitre = "Inscription";
-
-require_once __DIR__ . DS . 'components' . DS . 'header.php';
-require_once __DIR__ . DS . 'app' . DS . 'controllers' . DS . 'connectionController.php';
+require_once dirname(__DIR__) . DS . 'templates' . DS . 'header.php';
+require_once dirname(__DIR__, 2) . DS . 'controllers' . DS . 'connectionController.php';
+$errors = $args['errors'] ?? '';
+$valeursEchappees = $args['valeursEchappees'] ?? '';
 ?>
 <div class="container">
 
-    <?php if (!empty($errorMessage)) : ?>
+    <?php if (!empty($args['errorMessage'])) : ?>
         <div class="error-message">
-            <?= htmlspecialchars($errorMessage, ENT_QUOTES, 'UTF-8') ?>
+            <?= htmlspecialchars($args['errorMessage'], ENT_QUOTES, 'UTF-8') ?>
         </div>
     <?php endif; ?>
 
@@ -48,9 +36,9 @@ require_once __DIR__ . DS . 'app' . DS . 'controllers' . DS . 'connectionControl
                 <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>">
                 <button type="submit" id="submitBtn">Se connecter</button>
             </p>
-            <p id="maCible"><a href="/register.php">S'inscrire</a></p>
+            <p id="maCible"><a href="/inscription">S'inscrire</a></p>
         </fieldset>
     </form>
 </div>
 </body>
-<?php require_once __DIR__ . DS . 'components' . DS . 'footer.php'; ?>
+<?php require_once dirname(__DIR__) . DS . 'templates' . DS . 'footer.php'; ?>

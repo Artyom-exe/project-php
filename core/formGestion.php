@@ -2,8 +2,11 @@
 
 require_once dirname(__DIR__) . DS . "core" . DS . "dataBaseFunctions.php";
 
-function gestion_formulaire(array $formMessage, array $champsConfig, array &$errors, array &$valeursEchappees): void
+function gestion_formulaire(array $formMessage, array $champsConfig): array
 {
+    $errors = [];
+    $valeursEchappees = [];
+
     // Parcourt tous les champs configurés
     foreach ($champsConfig as $nomChamps => $regles) {
         // Récupère la valeur du champ et la nettoie
@@ -28,4 +31,10 @@ function gestion_formulaire(array $formMessage, array $champsConfig, array &$err
             $errors[$nomChamps] = $formMessage["pseudo_existe"];
         }
     }
+
+    return
+        [
+            'errors' => $errors,
+            'valeursEchappees' => $valeursEchappees
+        ];
 }

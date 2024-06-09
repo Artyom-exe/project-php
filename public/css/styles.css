@@ -315,6 +315,7 @@ form p button[type='submit']:hover {
 .content-mdp form {
     display: grid;
     grid-template-columns: 1fr;
+    margin-bottom: 0;
 }
 
 .content-mdp form div.error-value {

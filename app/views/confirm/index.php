@@ -1,32 +1,19 @@
 <?php
-// Inclusion des constantes de configuration
-require_once __DIR__ . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'constantes.php';
-
-// Initialisation de la session si elle n'est pas déjà démarrée
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
-
-// Génération du token CSRF s'il n'existe pas déjà
-if (empty($_SESSION['csrf_token'])) {
-    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-}
-
-// Inclusion du contrôleur de confirmation
-require_once __DIR__ . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'controllers' . DIRECTORY_SEPARATOR . "confirmController.php";
-
-// Définition des métadonnées pour la page
-$metaDescription = "Page de confirmation";
-$pageTitre = "Page de confirmation";
-
-// Inclusion de l'en-tête
-require_once __DIR__ . DIRECTORY_SEPARATOR . 'components' . DIRECTORY_SEPARATOR . 'header.php';
+require_once dirname(__DIR__, 2) . DS . 'controllers' . DS . 'confirmController.php';
+require_once dirname(__DIR__) . DS . 'templates' . DS . 'header.php';
+$errors = $args['errors'] ?? '';
+$valeursEchappees = $args['valeursEchappees'] ?? '';
 ?>
 <div class="container">
 
-    <?php if (!empty($errorMessage)) : ?>
+    <?php if (!empty($args['errorMessage'])) : ?>
         <div class="error-message">
-            <?= htmlspecialchars($errorMessage, ENT_QUOTES, 'UTF-8') ?>
+            <?= htmlspecialchars($args['errorMessage'], ENT_QUOTES, 'UTF-8') ?>
+        </div>
+    <?php endif; ?>
+    <?php if (!empty($args['successMessage'])) : ?>
+        <div class="success-message">
+            <?= htmlspecialchars($args['successMessage'], ENT_QUOTES, 'UTF-8') ?>
         </div>
     <?php endif; ?>
     <main>
@@ -58,4 +45,4 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'components' . DIRECTORY_SEPARATOR 
         </div>
     </main>
 </div>
-<?php require_once __DIR__ . DIRECTORY_SEPARATOR . 'components' . DIRECTORY_SEPARATOR . 'footer.php'; ?>
+<?php require_once dirname(__DIR__) . DS . 'templates' . DS . 'footer.php';

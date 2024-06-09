@@ -1,78 +1,110 @@
 <?php
-
 // Inclusion des fichiers nécessaires
+require_once dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'init.php';
 require_once dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'formGestion.php';
-require_once dirname(__DIR__, 1) . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'authentificationModel.php';
+require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'authentificationModel.php';
 require_once dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'messagesGestion.php';
 require_once dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'dataBaseFunctions.php';
 require_once dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'profilGestion.php';
 require_once dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'authentificationGestion.php';
 
-// Redirection si déjà connecté
-if (isset($_SESSION['id']) && est_connecte($_SESSION['id'])) {
-    header("location: /profil.php");
-    exit();
+
+// Génération du token CSRF s'il n'existe pas
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
 
-$errors = []; // Tableau pour stocker les erreurs de formulaire
-$valeursEchappees = []; // Tableau pour stocker les valeurs échappées des champs de formulaire
+function obtenir_pageInfos()
+{
+    return [
+        'vue' => 'connection',
+        'titre' => 'Connexion',
+        'description' => '...'
+    ];
+}
 
-$champsConfig = obtenir_ChampsConfigsAuthentification(false); // Configuration des champs de formulaire
+function index($args = [])
+{
+    // Redirection si déjà connecté
+    if (isset($_SESSION['id']) && est_connecte($_SESSION['id'])) {
+        header("location: /profil");
+        exit();
+    }
 
-$formMessage = importer_messages('formMessages.json'); // Importation des messages du formulaire
+    // Inclure la vue avec les arguments
+    afficher_vue(obtenir_pageInfos(), 'index', $args);
+}
 
-// Vérification de la méthode de la requête
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
+function insert()
+{
 
-    // Vérification du token CSRF
-    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
-        $errors['csrf_token'] = "Token CSRF invalide.";
-    } else {
-        gestion_formulaire($formMessage, $champsConfig, $errors, $valeursEchappees); // Gestion du formulaire
+    $args = [
+        'errors' => [],
+        'errorMessage' => '', // Ajoutez une clé pour le message d'erreur
+        'valeursEchappees' => []
+    ];
 
-        if (empty($errors)) {
-            try {
-                $pdo = connexion_db();
+    $champsConfig = obtenir_ChampsConfigsAuthentification(false); // Configuration des champs de formulaire
 
-                $pseudo = $_POST['pseudo'];
-                $motDePasse = $_POST['motDePasse'];
+    $formMessage = importer_messages('formMessages.json'); // Importation des messages du formulaire
 
-                $requete = "SELECT * FROM t_utilisateur_uti WHERE uti_pseudo = :pseudo";
+    // Vérification de la méthode de la requête
+    if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-                $stmt = $pdo->prepare($requete);
+        // Vérification du token CSRF
+        if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+            $args['errors']['csrf_token'] = "Token CSRF invalide.";
+        } else {
+            // Validation du formulaire et récupération des erreurs et des valeurs échappées
+            $args = gestion_formulaire($formMessage, $champsConfig);
 
-                $stmt->bindValue(':pseudo', $pseudo, PDO::PARAM_STR);
+            if (empty($args['errors'])) {
 
-                $stmt->execute();
-                $utilisateur = $stmt->fetch(PDO::FETCH_ASSOC);
+                try {
+                    $pdo = connexion_db();
 
-                if ($utilisateur && password_verify($motDePasse, $utilisateur['uti_motdepasse'])) {
 
-                    // Informations pour vérification d'identité
-                    $verifierIdentite = [
-                        "utiId" => $utilisateur['uti_id'],
-                        "utiEmail" => $utilisateur['uti_email'],
-                        "urlRedirection" => "/profil.php",
-                        "envoyerCode" => true
-                    ];
+                    $pseudo = $_POST['pseudo'];
+                    $motDePasse = $_POST['motDePasse'];
 
-                    $_SESSION['verifierIdentite'] = $verifierIdentite;
+                    $requete = "SELECT * FROM t_utilisateur_uti WHERE uti_pseudo = :pseudo";
 
-                    // Redirection selon le statut du compte
-                    if (empty($utilisateur['uti_code_activation'])) {
-                        header("location: /confirm.php");
-                        exit();
+                    $stmt = $pdo->prepare($requete);
+
+                    $stmt->bindValue(':pseudo', $pseudo, PDO::PARAM_STR);
+
+                    $stmt->execute();
+                    $utilisateur = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                    if ($utilisateur && password_verify($motDePasse, $utilisateur['uti_motdepasse'])) {
+
+                        // Informations pour vérification d'identité
+                        $verifierIdentite = [
+                            "utiId" => $utilisateur['uti_id'],
+                            "utiEmail" => $utilisateur['uti_email'],
+                            "urlRedirection" => "/profil",
+                            "envoyerCode" => true
+                        ];
+
+                        $_SESSION['verifierIdentite'] = $verifierIdentite;
+
+                        // Redirection selon le statut du compte
+                        if ($utilisateur['uti_compte_active'] === 0) {
+                            header("location: /confirm");
+                            exit();
+                        } else {
+                            connecter_utilisateur($_SESSION['verifierIdentite']['utiId']);
+                            header("location: " . $_SESSION['verifierIdentite']['urlRedirection']);
+                            exit();
+                        }
                     } else {
-                        connecter_utilisateur($_SESSION['verifierIdentite']['utiId']);
-                        header("location: " . $_SESSION['verifierIdentite']['urlRedirection']);
-                        exit();
+                        $args['errorMessage'] = $formMessage['id-mdp-echec'];
                     }
-                } else {
-                    $errorMessage = $formMessage['id-mdp-echec'];
+                } catch (PDOException $e) {
+                    gerer_exceptions($e);
                 }
-            } catch (PDOException $e) {
-                gerer_exceptions($e);
             }
         }
     }
+    index($args);
 }
