@@ -26,8 +26,6 @@ $posts = $_SESSION['posts'];
                 echo "<h3>" . $posts[$i]['uti_pseudo'] . "</h3><br>";
                 echo "<h3>" . $posts[$i]['pos_title'] . "</h3><br>";
                 echo "<p>" . $posts[$i]['pos_content'] . "</p><br>";
-                echo '<button class="btn-primary edit-btn">Modifier</button>';
-                echo '<button class="btn-primary delete-btn">Supprimer</button>';
                 echo "</div>";
             }
         } else {
