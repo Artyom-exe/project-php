@@ -16,5 +16,7 @@
   "mail_succes": "Le mail a été envoyé",
   "mail_echec": "L'envoi du courriel a échoué.",
   "id-mdp-echec": "L'identifiant ou le mot de passe est incorrect",
-  "register_success": "Vous êtes bien enregistré !"
+  "register_success": "Vous êtes bien enregistré !",
+  "mail-change": "Le mail a été changé avec succès",
+  "maj-failed-email": "Erreur de mise à jour de l'email: "
 }

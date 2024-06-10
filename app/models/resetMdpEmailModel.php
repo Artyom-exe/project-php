@@ -9,17 +9,17 @@ function obtenir_ChampsConfigsProfilReset(): array
             'requis' => true,
             'type' => 'email', // Vérification du format de l'email
             'mail_unique' => true // Vérifier que l'email est unique
-        ],
-        'password-confirm' => [
-            'requis' => true,
-            'minLength' => 8,
-            'maxLength' => 72,
-            'confirme' => 'motDePasse' // Vérification de la confirmation du mot de passe
-        ],
-        'password-reset' => [
-            'requis' => true,
-            'minLength' => 8,
-            'maxLength' => 72
         ]
+        // 'password-confirm' => [
+        //     'requis' => true,
+        //     'minLength' => 8,
+        //     'maxLength' => 72,
+        //     'confirme' => 'motDePasse' // Vérification de la confirmation du mot de passe
+        // ],
+        // 'password-reset' => [
+        //     'requis' => true,
+        //     'minLength' => 8,
+        //     'maxLength' => 72
+        // ]
     ];
 }

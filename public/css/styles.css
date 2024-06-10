@@ -234,8 +234,9 @@ form p button[type='submit']:hover {
     text-decoration: none;
 }
 
-/* Styles pour le formulaire reset mdp/email */
-.form-reset {
+/* Styles pour le formulaire reset email */
+.form-reset-email,
+.form-reset-password {
     width: 100%;
     max-width: 600px;
     margin: 30px auto;
@@ -245,16 +246,18 @@ form p button[type='submit']:hover {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.form-reset form {
-    display: grid;
-    grid-template-columns: 1fr;
-}
-
-.form-reset h2 {
+.form-reset-email h2,
+.form-reset-password h2 {
     margin-bottom: 1.25rem;
     font-size: 1.5rem;
     color: #323E6E;
     text-align: center;
+}
+
+.form-reset-email form,
+.form-reset-password form {
+    display: grid;
+    grid-template-columns: 1fr;
 }
 
 .form-group {
@@ -406,7 +409,8 @@ footer p {
         padding: 1rem;
     }
 
-    .form-reset {
+    .form-reset-email,
+    .form-reset-password {
         padding: 1rem;
     }
 
@@ -459,7 +463,8 @@ footer p {
         padding: 0.5rem;
     }
 
-    .form-reset {
+    .form-reset-email,
+    .form-reset-password {
         padding: 0.5rem;
     }
 

@@ -18,6 +18,7 @@ $routes = [
     obtenir_route('GET', '/connexion', 'connectionController', 'index'),
     obtenir_route('POST', '/connexion', 'connectionController', 'insert'),
     obtenir_route('GET', '/profil', 'profilController', 'index'),
+    obtenir_route('POST', '/profil', 'profilController', 'insert'),
     obtenir_route('GET', '/logout', 'logoutController', 'logout'),
     obtenir_route('GET', '/contact', 'contactController', 'index'),
     obtenir_route('POST', '/contact', 'contactController', 'insert'),
