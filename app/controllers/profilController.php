@@ -81,31 +81,20 @@ function updateEmail()
     // Validation du formulaire
     $args = gestion_formulaire($formMessage, $champsConfig);
 
-    // Si le formulaire est valide, procéder à la mise à jour de l'email
+    // Si le formulaire est valide, procéder à la redirection pour la confirmation par email
     if (empty($args['errors'])) {
-        try {
-            // Connexion à la base de données
-            $pdo = connexion_db();
+        // Stocker l'email dans la session
+        $_SESSION['new_email'] = $_POST['email-reset'];
 
-            // Préparation de la requête SQL pour mettre à jour l'email de l'utilisateur
-            $stmt = $pdo->prepare("UPDATE t_utilisateur_uti SET uti_email = :email WHERE uti_id = :id");
-            $stmt->bindValue(':email', $_POST['email-reset'], PDO::PARAM_STR);
-            $stmt->bindValue(':id', $_SESSION['id'], PDO::PARAM_INT);
-            $stmt->execute();
-
-            // Message de succès
-            $args['success'] = $formMessage['mail-change'];
-        } catch (PDOException $e) {
-            // Gestion des exceptions PDO
-            $args['error'] = $formMessage['maj-failed-email'] . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8');
-        }
+        // Rediriger vers la page de confirmation
+        header("Location: /confirm-email-mdp");
+        exit();
     }
 
-    // Retour à la page de profil
+    // Retour à la page de profil en cas d'erreur
     index($args);
 }
 
-// Fonction pour mettre à jour le mot de passe de l'utilisateur
 function updatePassword()
 {
     $args = [];
@@ -115,29 +104,20 @@ function updatePassword()
     // Validation du formulaire
     $args = gestion_formulaire($formMessage, $champsConfig);
 
-    // Si le formulaire est valide, procéder à la mise à jour du mot de passe
+    // Si le formulaire est valide, procéder à la redirection pour la confirmation par email
     if (empty($args['errors'])) {
-        try {
-            // Connexion à la base de données
-            $pdo = connexion_db();
+        // Stocker le nouveau mot de passe dans la session
+        $_SESSION['new_password'] = $_POST['password-reset'];
 
-            // Préparation de la requête SQL pour mettre à jour le mot de passe de l'utilisateur
-            $stmt = $pdo->prepare("UPDATE t_utilisateur_uti SET uti_motdepasse = :mot_de_passe WHERE uti_id = :id");
-            $stmt->bindValue(':mot_de_passe', password_hash($_POST['password-reset'], PASSWORD_BCRYPT), PDO::PARAM_STR);
-            $stmt->bindValue(':id', $_SESSION['id'], PDO::PARAM_INT);
-            $stmt->execute();
-
-            // Message de succès
-            $args['success'] = $formMessage['password-change-succes'];
-        } catch (PDOException $e) {
-            // Gestion des exceptions PDO
-            $args['error'] = $formMessage['maj-failed-password'] . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8');
-        }
+        // Rediriger vers la page de confirmation
+        header("Location: /confirm-email-mdp");
+        exit();
     }
 
-    // Retour à la page de profil
+    // Retour à la page de profil en cas d'erreur
     index($args);
 }
+
 
 // Fonction pour traiter la soumission du formulaire
 function insert()

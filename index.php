@@ -24,6 +24,8 @@ $routes = [
     obtenir_route('POST', '/contact', 'contactController', 'insert'),
     obtenir_route('GET', '/confirm', 'confirmController', 'index'),
     obtenir_route('POST', '/confirm', 'confirmController', 'insert'),
+    obtenir_route('GET', '/confirm-email-mdp', 'confirmEmailMdpController', 'index'),
+    obtenir_route('POST', '/confirm-email-mdp', 'confirmEmailMdpController', 'insert')
 ];
 
 demarrer_routeur($routes);

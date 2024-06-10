@@ -12,9 +12,9 @@ $valeursEchappees = $args['valeursEchappees'] ?? '';
             <?= htmlspecialchars($args['errors']['maj-failed-email'], ENT_QUOTES, 'UTF-8') ?>
         </div>
     <?php endif; ?>
-    <?php if (!empty($args['success'])) : ?>
+    <?php if (!empty($_SESSION['success'])) : [] ?>
         <div class="success-message">
-            <?= htmlspecialchars($args['success'], ENT_QUOTES, 'UTF-8') ?>
+            <?= htmlspecialchars($_SESSION['success'], ENT_QUOTES, 'UTF-8') ?>
         </div>
     <?php endif; ?>
 

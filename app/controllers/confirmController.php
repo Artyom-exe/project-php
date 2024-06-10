@@ -110,6 +110,7 @@ function insert()
                         $urlRedirection = $_SESSION['verifierIdentite']['urlRedirection'];
                         header("Location: $urlRedirection");
                         unset($_SESSION['verifierIdentite']);
+                        unset($_SESSION['code']);
                         exit();
                     } else {
                         $args['errorMessage'] = $formMessage['code_incorrect'];
@@ -120,6 +121,3 @@ function insert()
     }
     index($args);
 }
-
-// Appel initial de la fonction index pour afficher la page et générer le code si nécessaire
-index();
