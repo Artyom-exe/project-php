@@ -4,7 +4,6 @@ require_once dirname(__DIR__) . DS . 'templates' . DS . 'header.php';
 $utilisateur = $_SESSION['utilisateur'];
 $errors = $args['errors'] ?? '';
 $valeursEchappees = $args['valeursEchappees'] ?? '';
-var_dump($args['errors']);
 ?>
 <div class="container">
 
@@ -47,10 +46,20 @@ var_dump($args['errors']);
                     <label for="password-reset">Nouveau Mot de Passe</label>
                     <input type="password" class="form-control" id="password-reset" name="password-reset" placeholder="Entrez votre nouveau mot de passe" required>
                 </div>
+
+                <?php if (!empty($errors['password-reset'])) : ?>
+                    <div class="error-value"><?= htmlspecialchars($errors['password-reset'], ENT_QUOTES, 'UTF-8') ?></div>
+                <?php endif; ?>
+
                 <div class="form-group">
                     <label for="password-confirm">Confirme Mot de Passe</label>
                     <input type="password" class="form-control" id="password-confirm" name="password-confirm" placeholder="Confirmez votre nouveau mot de passe" required>
                 </div>
+
+                <?php if (!empty($errors['password-confirm'])) : ?>
+                    <div class="error-value"><?= htmlspecialchars($errors['password-confirm'], ENT_QUOTES, 'UTF-8') ?></div>
+                <?php endif; ?>
+
                 <!-- Inclusion du jeton CSRF -->
                 <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>">
                 <button type="submit" class="btn-primary">Mettre à jour le mot de passe</button>

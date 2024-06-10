@@ -3,13 +3,9 @@ require_once dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPA
 require_once dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'dataBaseFunctions.php';
 require_once dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'formGestion.php';
 require_once dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'authentificationGestion.php';
-require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'resetMdpEmailModel.php';
+require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'resetEmailModel.php';
+require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'resetMdpModel.php';
 require_once dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'messagesGestion.php';
-
-// Initialisation du token CSRF s'il n'existe pas déjà
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
 
 if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
@@ -75,54 +71,90 @@ function index($args = [])
     afficher_vue(obtenir_pageInfos(), 'index', $args);
 }
 
-// Fonction pour insérer ou mettre à jour les données de l'utilisateur
-function insert()
+// Fonction pour mettre à jour l'email de l'utilisateur
+function updateEmail()
 {
-    $args = [
-        'errors' => [],
-        'valeursEchappees' => []
-    ];
-
-    $champsConfig = obtenir_ChampsConfigsProfilReset(); // Configuration des champs de formulaire
+    $args = [];
+    $champsConfig = obtenir_ChampsConfigsEmailReset(); // Configuration des champs de formulaire
     $formMessage = importer_messages('formMessages.json'); // Importation des messages du formulaire
 
-    // Vérification de la méthode de la requête
-    if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    // Validation du formulaire
+    $args = gestion_formulaire($formMessage, $champsConfig);
 
-        // Vérification du token CSRF
-        if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
-            $args['errors']['csrf_token'] = "Token CSRF invalide.";
-        } else {
-            if (isset($_POST['email-reset'])) {
-                // Validation du formulaire
-                $args = gestion_formulaire($formMessage, $champsConfig);
+    // Si le formulaire est valide, procéder à la mise à jour de l'email
+    if (empty($args['errors'])) {
+        try {
+            // Connexion à la base de données
+            $pdo = connexion_db();
 
-                // Si le formulaire est valide, procéder à la mise à jour de l'email
-                if (empty($args['errors'])) {
+            // Préparation de la requête SQL pour mettre à jour l'email de l'utilisateur
+            $stmt = $pdo->prepare("UPDATE t_utilisateur_uti SET uti_email = :email WHERE uti_id = :id");
+            $stmt->bindValue(':email', $_POST['email-reset'], PDO::PARAM_STR);
+            $stmt->bindValue(':id', $_SESSION['id'], PDO::PARAM_INT);
+            $stmt->execute();
 
-                    try {
-                        // Connexion à la base de données
-                        $pdo = connexion_db();
-
-                        // Préparation de la requête SQL pour mettre à jour l'email de l'utilisateur
-                        $stmt = $pdo->prepare("UPDATE t_utilisateur_uti SET uti_email = :email WHERE uti_id = :id");
-                        $stmt->bindValue(':email', $_POST['email-reset'], PDO::PARAM_STR);
-                        $stmt->bindValue(':id', $_SESSION['id'], PDO::PARAM_INT);
-                        $stmt->execute();
-
-                        // Message de succès
-                        $args['success'] = $formMessage['mail-change'];
-                    } catch (PDOException $e) {
-                        // Gestion des exceptions PDO
-                        $args['error'] = $formMessage['maj-failed-email'] . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8');
-                    }
-                } else {
-                    $args['errors']['email'] = $formMessage['email'];
-                }
-            }
+            // Message de succès
+            $args['success'] = $formMessage['mail-change'];
+        } catch (PDOException $e) {
+            // Gestion des exceptions PDO
+            $args['error'] = $formMessage['maj-failed-email'] . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8');
         }
     }
 
     // Retour à la page de profil
     index($args);
+}
+
+// Fonction pour mettre à jour le mot de passe de l'utilisateur
+function updatePassword()
+{
+    $args = [];
+    $champsConfig = obtenir_ChampsConfigsMdpReset(); // Configuration des champs de formulaire
+    $formMessage = importer_messages('formMessages.json'); // Importation des messages du formulaire
+
+    // Validation du formulaire
+    $args = gestion_formulaire($formMessage, $champsConfig);
+
+    // Si le formulaire est valide, procéder à la mise à jour du mot de passe
+    if (empty($args['errors'])) {
+        try {
+            // Connexion à la base de données
+            $pdo = connexion_db();
+
+            // Préparation de la requête SQL pour mettre à jour le mot de passe de l'utilisateur
+            $stmt = $pdo->prepare("UPDATE t_utilisateur_uti SET uti_motdepasse = :mot_de_passe WHERE uti_id = :id");
+            $stmt->bindValue(':mot_de_passe', password_hash($_POST['password-reset'], PASSWORD_BCRYPT), PDO::PARAM_STR);
+            $stmt->bindValue(':id', $_SESSION['id'], PDO::PARAM_INT);
+            $stmt->execute();
+
+            // Message de succès
+            $args['success'] = $formMessage['password-change-succes'];
+        } catch (PDOException $e) {
+            // Gestion des exceptions PDO
+            $args['error'] = $formMessage['maj-failed-password'] . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8');
+        }
+    }
+
+    // Retour à la page de profil
+    index($args);
+}
+
+// Fonction pour traiter la soumission du formulaire
+function insert()
+{
+    if ($_SERVER["REQUEST_METHOD"] === "POST") {
+        // Vérification du token CSRF
+        if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+            $args['errors']['csrf_token'] = "Token CSRF invalide.";
+        } else {
+            if (isset($_POST['email-reset'])) {
+                updateEmail();
+            }
+            if (isset($_POST['password-reset'])) {
+                updatePassword();
+            }
+        }
+    } else {
+        index();
+    }
 }

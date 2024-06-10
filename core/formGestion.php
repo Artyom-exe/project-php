@@ -10,7 +10,7 @@ function gestion_formulaire(array $formMessage, array $champsConfig): array
     // Parcourt tous les champs configurés
     foreach ($champsConfig as $nomChamps => $regles) {
         // Récupère la valeur du champ et la nettoie
-        $valeur = trim($_POST[$nomChamps]);
+        $valeur = isset($_POST[$nomChamps]) ? trim($_POST[$nomChamps]) : '';
         // Échappe les caractères spéciaux pour éviter les attaques XSS
         $valeursEchappees[$nomChamps] = htmlentities($valeur);
 
@@ -23,7 +23,7 @@ function gestion_formulaire(array $formMessage, array $champsConfig): array
             $errors[$nomChamps] = str_replace("%0%", $regles["maxLength"], $formMessage["maxLength"]);
         } elseif (isset($regles['type']) && $regles["type"] === "email" && !filter_var($valeur, FILTER_VALIDATE_EMAIL)) {
             $errors[$nomChamps] = $formMessage["email"];
-        } elseif (isset($regles['confirme']) && $valeur !== $_POST[$regles['confirme']]) {
+        } elseif (isset($regles['confirme']) && (!isset($_POST[$regles['confirme']]) || $valeur !== ($_POST[$regles['confirme']]))) {
             $errors[$nomChamps] = $formMessage["confirme"];
         } elseif (isset($regles['mail_unique']) && $regles['mail_unique'] === true && verifier_valeurDbExiste('t_utilisateur_uti', 'uti_email', $valeur)) {
             $errors[$nomChamps] = $formMessage["mail_existe"];
@@ -32,9 +32,8 @@ function gestion_formulaire(array $formMessage, array $champsConfig): array
         }
     }
 
-    return
-        [
-            'errors' => $errors,
-            'valeursEchappees' => $valeursEchappees
-        ];
+    return [
+        'errors' => $errors,
+        'valeursEchappees' => $valeursEchappees
+    ];
 }

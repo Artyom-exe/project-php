@@ -200,6 +200,7 @@ form p button[type='submit']:hover {
     border-radius: 0.5rem;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     text-align: center;
+    order: 1;
 }
 
 .content-profil h2 {
@@ -235,6 +236,14 @@ form p button[type='submit']:hover {
 }
 
 /* Styles pour le formulaire reset email */
+.form-reset-email {
+    order: 2;
+}
+
+.form-reset-password {
+    order: 3;
+}
+
 .form-reset-email,
 .form-reset-password {
     width: 100%;
@@ -262,6 +271,10 @@ form p button[type='submit']:hover {
 
 .form-group {
     margin-bottom: 0.75rem;
+}
+
+.form-group > label {
+    margin-top: 0.7rem;
 }
 
 .form-group label {
@@ -300,6 +313,7 @@ form p button[type='submit']:hover {
     cursor: pointer;
     text-align: center;
     transition: background-color 0.3s ease;
+    margin-top: 0.8rem;;
 }
 
 .btn-primary:hover {
