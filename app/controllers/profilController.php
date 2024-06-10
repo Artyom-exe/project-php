@@ -5,6 +5,7 @@ require_once dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPA
 require_once dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'authentificationGestion.php';
 require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'resetEmailModel.php';
 require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'resetMdpModel.php';
+require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'postsModel.php';
 require_once dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'messagesGestion.php';
 
 if (empty($_SESSION['csrf_token'])) {
@@ -35,7 +36,7 @@ function index($args = [])
         $pdo = connexion_db();
 
         // Préparation de la requête SQL pour récupérer les informations de l'utilisateur
-        $requete = "SELECT uti_pseudo, uti_email FROM t_utilisateur_uti WHERE uti_id = :id";
+        $requete = "SELECT uti_pseudo, uti_email, uti_id FROM t_utilisateur_uti WHERE uti_id = :id";
         $stmt = $pdo->prepare($requete);
 
         // Validation de l'ID de session
@@ -56,6 +57,52 @@ function index($args = [])
         if ($utilisateur) {
             // Stockage des informations de l'utilisateur dans une variable de session
             $_SESSION['utilisateur'] = $utilisateur;
+        } else {
+            throw new Exception("Utilisateur non trouvé.");
+        }
+    } catch (PDOException $e) {
+        // Gestion des exceptions PDO
+        $args['error'] = "Erreur PDO : " . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8');
+    } catch (Exception $e) {
+        // Gestion des autres exceptions
+        $args['error'] = "Erreur : " . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8');
+    }
+
+    // récupération des posts de l'utilisateur
+
+    try {
+        // Connexion à la base de données
+        $pdo = connexion_db();
+
+        // Préparation de la requête SQL pour récupérer les informations de l'utilisateur
+        $requete =
+            "SELECT uti_pseudo, pos_title, pos_content
+                    FROM t_utilisateur_uti
+                    INNER JOIN p_posts_pos ON uti_id=pos_uti_id
+                    WHERE uti_id = :id";
+
+        $stmt = $pdo->prepare($requete);
+
+        // Validation de l'ID de session
+        $session_id = filter_var($_SESSION['id'], FILTER_VALIDATE_INT);
+        if (
+            $session_id === false || $session_id <= 0
+        ) {
+            throw new Exception("ID de session invalide.");
+        }
+
+        // Liaison de la valeur de l'ID de session à la requête préparée
+        $stmt->bindValue(':id', $session_id, PDO::PARAM_INT);
+
+        // Exécution de la requête
+        $stmt->execute();
+
+        // Récupération des informations de l'utilisateur
+        $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if ($posts) {
+            // Stockage des informations de l'utilisateur dans une variable de session
+            $_SESSION['posts-utilisateur'] = $posts;
         } else {
             throw new Exception("Utilisateur non trouvé.");
         }
@@ -118,6 +165,55 @@ function updatePassword()
     index($args);
 }
 
+function sendPost()
+{
+    $args = [];
+    $champsConfig = obtenir_ChampsConfigsPost(); // Configuration des champs de formulaire
+    $formMessage = importer_messages('formMessages.json'); // Importation des messages du formulaire
+
+    // Validation du formulaire
+    $args = gestion_formulaire($formMessage, $champsConfig);
+
+    // Si le formulaire est valide, procéder à la redirection pour la confirmation par email
+    if (empty($args['errors'])) {
+        // Connexion à la base de données
+        $pdo = connexion_db();
+
+        // Récupération des valeurs des champs
+        $title = $args['valeursEchappees']['post-title'];
+        $content = $args['valeursEchappees']['post-content']; // Hashage du mot de passe
+        $id = $_SESSION['utilisateur']['uti_id']; // Hashage du mot de passe
+
+        // Requête SQL pour insérer un nouvel utilisateur dans la base de données
+        $requete = "INSERT INTO p_posts_pos (pos_title, pos_content, pos_uti_id) VALUES (:title, :content, :id)";
+
+        try {
+            // Préparation de la requête
+            $stmt = $pdo->prepare($requete);
+
+            // Liaison des valeurs aux paramètres de la requête
+            $stmt->bindParam(':title', $title);
+            $stmt->bindParam(':content', $content);
+            $stmt->bindParam(':id', $id);
+
+            // Exécution de la requête
+            $stmt->execute();
+
+            // Affichage du message de succès
+            $args['post-posted'] = $formMessage['post-posted'];
+
+            // Réinitialisation des valeurs échappées
+            $args['valeursEchappees'] = [];
+        } catch (PDOException $e) {
+            // Affichage de l'erreur en cas d'échec de l'insertion
+            $args['post-not-posted'] = $formMessage['post-not-posted'];
+        }
+    }
+
+
+    // Retour à la page de profil en cas d'erreur
+    index($args);
+}
 
 // Fonction pour traiter la soumission du formulaire
 function insert()
@@ -132,6 +228,9 @@ function insert()
             }
             if (isset($_POST['password-reset'])) {
                 updatePassword();
+            }
+            if (isset($_POST['post-title'])) {
+                sendPost();
             }
         }
     } else {

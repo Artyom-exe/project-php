@@ -20,5 +20,7 @@
   "mail-change": "Le mail a été changé avec succès",
   "maj-failed-email": "Erreur de mise à jour de l'email",
   "password-change-succes": "Le mot de passe à bien été changé",
-  "maj-failed-password": "Erreur de mise à jour du mot de passe"
+  "maj-failed-password": "Erreur de mise à jour du mot de passe",
+  "post-posted": "Post en ligne",
+  "post-not-posted": "Post erreur"
 }

@@ -1,7 +1,10 @@
 <?php
 require_once dirname(__DIR__, 2) . DS . 'controllers' . DS . 'profilController.php';
 require_once dirname(__DIR__) . DS . 'templates' . DS . 'header.php';
+
 $utilisateur = $_SESSION['utilisateur'];
+$posts = $_SESSION['posts-utilisateur'];
+
 $errors = $args['errors'] ?? '';
 $valeursEchappees = $args['valeursEchappees'] ?? '';
 ?>
@@ -12,7 +15,7 @@ $valeursEchappees = $args['valeursEchappees'] ?? '';
             <?= htmlspecialchars($args['errors']['maj-failed-email'], ENT_QUOTES, 'UTF-8') ?>
         </div>
     <?php endif; ?>
-    <?php if (!empty($_SESSION['success'])) : [] ?>
+    <?php if (!empty($_SESSION['success'])) : ?>
         <div class="success-message">
             <?= htmlspecialchars($_SESSION['success'], ENT_QUOTES, 'UTF-8') ?>
         </div>
@@ -66,6 +69,34 @@ $valeursEchappees = $args['valeursEchappees'] ?? '';
             </form>
         </div>
 
+        <!-- Formulaire d'ajout de post -->
+        <div class="form-add-post">
+            <h2>Ajouter un Nouveau Post</h2>
+            <form action="/profil" method="POST">
+                <div class="form-group">
+                    <label for="post-title">Titre du Post</label>
+                    <input type="text" class="form-control" id="post-title" name="post-title" value="<?= htmlspecialchars($valeursEchappees['post-title'] ?? "", ENT_QUOTES, 'UTF-8') ?>" placeholder="Entrez le titre de votre post">
+                </div>
+
+                <?php if (!empty($errors['post-title'])) : ?>
+                    <div class="error-value"><?= htmlspecialchars($errors['post-title'], ENT_QUOTES, 'UTF-8') ?></div>
+                <?php endif; ?>
+
+                <div class="form-group">
+                    <label for="post-content">Contenu du Post</label>
+                    <textarea class="form-control" id="post-content" name="post-content" placeholder="Entrez le contenu de votre post"><?= htmlspecialchars($valeursEchappees['post-content'] ?? "", ENT_QUOTES, 'UTF-8') ?></textarea>
+                </div>
+
+                <?php if (!empty($errors['post-content'])) : ?>
+                    <div class="error-value"><?= htmlspecialchars($errors['post-content'], ENT_QUOTES, 'UTF-8') ?></div>
+                <?php endif; ?>
+
+                <!-- Inclusion du jeton CSRF -->
+                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>">
+                <button type="submit" class="btn-primary">Ajouter le Post</button>
+            </form>
+        </div>
+
         <div class="content-profil">
 
             <h2>Informations du profil</h2>
@@ -73,6 +104,23 @@ $valeursEchappees = $args['valeursEchappees'] ?? '';
             <p>Email: <?= htmlspecialchars($utilisateur['uti_email'], ENT_QUOTES, 'UTF-8') ?></p>
             <a href="/logout" class="logout-link">Déconnexion</a>
         </div>
+
+        <?php
+        if (isset($_SESSION['posts-utilisateur'])) {
+            $posts = array_reverse($posts); // Inverser l'ordre des posts
+            for ($i = 0; $i < count($posts); $i++) {
+                echo "<div class='form-add-post'>";
+                echo "<h3>" . $posts[$i]['uti_pseudo'] . "</h3><br>";
+                echo "<h3>" . $posts[$i]['pos_title'] . "</h3><br>";
+                echo "<p>" . $posts[$i]['pos_content'] . "</p><br>";
+                echo '<button class="btn-primary edit-btn">Modifier</button>';
+                echo '<button class="btn-primary delete-btn">Supprimer</button>';
+                echo "</div>";
+            }
+        } else {
+            echo "Aucun utilisateur trouvé.";
+        }
+        ?>
     </main>
 </div>
 <?php require_once dirname(__DIR__) . DS . 'templates' . DS . 'footer.php'; ?>
