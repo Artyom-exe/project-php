@@ -33,7 +33,7 @@ function index()
 
         if ($posts) {
             // Stockage des informations de l'utilisateur dans une variable de session
-            $_SESSION['posts'] = $posts;
+            $args['posts'] = $posts;
         } else {
             throw new Exception("Utilisateur non trouvé.");
         }
@@ -45,7 +45,7 @@ function index()
         $args['error'] = "Erreur : " . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8');
     }
     // Inclure la vue avec les arguments
-    afficher_vue(obtenir_pageInfos(), 'index');
+    afficher_vue(obtenir_pageInfos(), 'index', $args);
 }
 
 index();

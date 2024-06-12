@@ -22,5 +22,9 @@
   "password-change-succes": "Le mot de passe à bien été changé",
   "maj-failed-password": "Erreur de mise à jour du mot de passe",
   "post-posted": "Post en ligne",
-  "post-not-posted": "Post erreur"
+  "post-not-posted": "Post erreur",
+  "delete-post": "Le post a été supprimé",
+  "failed-delete-post": "Impossible de supprimer le post",
+  "post-modify": "Le post a été modifié",
+  "post-not-modify": "Impossible de modifier le post"
 }

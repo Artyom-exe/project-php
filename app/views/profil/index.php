@@ -3,23 +3,35 @@ require_once dirname(__DIR__, 2) . DS . 'controllers' . DS . 'profilController.p
 require_once dirname(__DIR__) . DS . 'templates' . DS . 'header.php';
 
 $utilisateur = $_SESSION['utilisateur'];
-$posts = $_SESSION['posts-utilisateur'] ?? '';
-
 $errors = $args['errors'] ?? '';
 $valeursEchappees = $args['valeursEchappees'] ?? '';
 ?>
 <div class="container">
 
-    <?php if (!empty($args['errors']['maj-failed-email'])) : ?>
+    <?php if ((!empty($args['errors']['maj-failed-email']))) : ?>
         <div class="error-message">
             <?= htmlspecialchars($args['errors']['maj-failed-email'], ENT_QUOTES, 'UTF-8') ?>
         </div>
     <?php endif; ?>
-    <?php if (!empty($_SESSION['success'])) : ?>
+
+    <?php if (!empty($args['message-failed-profil'])) : ?>
+        <div class="error-message">
+            <?= htmlspecialchars($args['message-failed-profil'], ENT_QUOTES, 'UTF-8') ?>
+        </div>
+    <?php endif; ?>
+
+    <?php if ((!empty($_SESSION['success']))) : ?>
         <div class="success-message">
             <?= htmlspecialchars($_SESSION['success'], ENT_QUOTES, 'UTF-8') ?>
         </div>
     <?php endif; ?>
+
+    <?php if (!empty($args['message-success-profil'])) : ?>
+        <div class="success-message">
+            <?= htmlspecialchars($args['message-success-profil'], ENT_QUOTES, 'UTF-8') ?>
+        </div>
+    <?php endif; ?>
+
 
     <main>
         <!-- Formulaire de réinitialisation de l'email -->
@@ -108,27 +120,35 @@ $valeursEchappees = $args['valeursEchappees'] ?? '';
         <!-- Posts de l'utilisateur -->
 
         <?php
-        if (isset($_SESSION['posts-utilisateur'])) {
+        if (isset($args['posts-utilisateur'])) {
+            $posts = $args['posts-utilisateur'];
             $posts = array_reverse($posts); // Inverser l'ordre des posts
             for ($i = 0; $i < count($posts); $i++) {
                 echo "<div class='form-add-post'>";
+                echo "<form action='/profil' method='POST'>"; // Formulaires principaux ouverts ici
                 echo "<h3>" . htmlspecialchars($posts[$i]['uti_pseudo'], ENT_QUOTES, 'UTF-8') . "</h3><br>";
-                echo "<h3>" . htmlspecialchars($posts[$i]['pos_title'], ENT_QUOTES, 'UTF-8') . "</h3><br>";
-                echo "<p>" . htmlspecialchars($posts[$i]['pos_content'], ENT_QUOTES, 'UTF-8') . "</p><br>";
+                echo "<div class='form-group'>";
+                echo "<label for='post-title-modif'>Titre du Post</label>";
+                echo "<input type='text' class='form-control' id='post-title-modif' name='post-title-modif' value='" . htmlspecialchars($posts[$i]['pos_title'], ENT_QUOTES, 'UTF-8') . "'>";
+                echo "</div>";
+
+                echo "<div class='form-group'>";
+                echo "<label for='post-content-modif'>Contenu du Post</label>";
+                echo "<textarea class='form-control' id='post-content-modif' name='post-content-modif'>" . htmlspecialchars($posts[$i]['pos_content'], ENT_QUOTES, 'UTF-8') . "</textarea>";
+                echo "</div>";
 
                 // Form for Edit action
-                echo '<form action="" method="POST">';
                 echo '<input type="hidden" name="post_id_modify" value="' . htmlspecialchars($posts[$i]['pos_id'], ENT_QUOTES, 'UTF-8') . '">';
                 echo '<input type="hidden" name="csrf_token" value="' . htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') . '">';
                 echo '<button type="submit" class="btn-primary edit-btn">Modifier</button>';
-                echo '</form>';
 
                 // Form for Delete action
-                echo '<form action="" method="POST">';
+                echo '</form>'; // Fermeture du premier formulaire
+                echo '<form action="" method="POST">'; // Deuxième formulaire ouvert
                 echo '<input type="hidden" name="post_id_delete" value="' . htmlspecialchars($posts[$i]['pos_id'], ENT_QUOTES, 'UTF-8') . '">';
                 echo '<input type="hidden" name="csrf_token" value="' . htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') . '">';
                 echo '<button type="submit" class="btn-primary delete-btn">Supprimer</button>';
-                echo '</form>';
+                echo '</form>'; // Fermeture du deuxième formulaire
                 echo "</div>";
             }
         }

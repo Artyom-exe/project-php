@@ -102,7 +102,7 @@ function index($args = [])
 
         if ($posts) {
             // Stockage des informations de l'utilisateur dans une variable de session
-            $_SESSION['posts-utilisateur'] = $posts;
+            $args['posts-utilisateur'] = $posts;
         } else {
             throw new Exception("Utilisateur non trouvé.");
         }
@@ -200,15 +200,66 @@ function sendPost()
             $stmt->execute();
 
             // Affichage du message de succès
-            $args['post-posted'] = $formMessage['post-posted'];
+            $args['message-success-profil'] = $formMessage['post-posted'];
 
             // Réinitialisation des valeurs échappées
             $args['valeursEchappees'] = [];
         } catch (PDOException $e) {
             // Affichage de l'erreur en cas d'échec de l'insertion
-            $args['post-not-posted'] = $formMessage['post-not-posted'];
+            $args['message-failed-profil'] = $formMessage['post-not-posted'];
         }
     }
+
+
+    // Retour à la page de profil en cas d'erreur
+    index($args);
+}
+
+function modifyPost($id)
+{
+    // $args = [];
+    // $champsConfig = obtenir_ChampsConfigsPost(); // Configuration des champs de formulaire
+
+    $formMessage = importer_messages('formMessages.json'); // Importation des messages du formulaire
+
+    // // Validation du formulaire
+    // $args = gestion_formulaire($formMessage, $champsConfig);
+
+    // // Si le formulaire est valide, procéder à la redirection pour la confirmation par email
+    // if (empty($args['errors'])) {
+
+    // Connexion à la base de données
+    $pdo = connexion_db();
+
+    // Récupération des valeurs des champs
+    $title = $_POST['post-title-modif'];
+    $content = $_POST['post-content-modif'];
+
+    // Requête SQL pour remplacer le contenu du post
+    $requete = "UPDATE p_posts_pos SET pos_title = :title, pos_content = :content WHERE pos_id = :id";
+
+    try {
+        // Préparation de la requête
+        $stmt = $pdo->prepare($requete);
+
+        // Liaison des valeurs aux paramètres de la requête
+        $stmt->bindParam(':title', $title);
+        $stmt->bindParam(':content', $content);
+        $stmt->bindParam(':id', $id);
+
+        // Exécution de la requête
+        $stmt->execute();
+
+        // Affichage du message de succès
+        $args['message-success-profil'] = $formMessage['post-modify'];
+
+        // Réinitialisation des valeurs échappées
+        $args['valeursEchappees'] = [];
+    } catch (PDOException $e) {
+        // Affichage de l'erreur en cas d'échec de l'insertion
+        $args['message-failed-profil'] = $formMessage['post-not-modify'];
+    }
+    // }
 
 
     // Retour à la page de profil en cas d'erreur
@@ -237,12 +288,10 @@ function deletePost($id)
         $stmt->execute();
 
         // Affichage du message de succès
-        // $args['delete-post'] = $formMessage['delete-post'];
-        echo 'ok';
+        $args['message-success-profil'] = $formMessage['delete-post'];
     } catch (PDOException $e) {
         // Affichage de l'erreur en cas d'échec de l'insertion
-        // $args['failed-delete-post'] = $formMessage['failed-delete-post'];
-        echo 'pas ok';
+        $args['message-failed-profil'] = $formMessage['failed-delete-post'];
     }
     index($args);
 }
@@ -267,6 +316,9 @@ function insert()
             }
             if (isset($_POST['post_id_delete'])) {
                 deletePost($_POST['post_id_delete']);
+            }
+            if (isset($_POST['post_id_modify'])) {
+                modifyPost($_POST['post_id_modify']);
             }
         }
     } else {
