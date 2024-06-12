@@ -3,7 +3,7 @@ require_once dirname(__DIR__, 2) . DS . 'controllers' . DS . 'profilController.p
 require_once dirname(__DIR__) . DS . 'templates' . DS . 'header.php';
 
 $utilisateur = $_SESSION['utilisateur'];
-$posts = $_SESSION['posts-utilisateur'];
+$posts = $_SESSION['posts-utilisateur'] ?? '';
 
 $errors = $args['errors'] ?? '';
 $valeursEchappees = $args['valeursEchappees'] ?? '';
@@ -105,20 +105,32 @@ $valeursEchappees = $args['valeursEchappees'] ?? '';
             <a href="/logout" class="logout-link">Déconnexion</a>
         </div>
 
+        <!-- Posts de l'utilisateur -->
+
         <?php
         if (isset($_SESSION['posts-utilisateur'])) {
             $posts = array_reverse($posts); // Inverser l'ordre des posts
             for ($i = 0; $i < count($posts); $i++) {
                 echo "<div class='form-add-post'>";
-                echo "<h3>" . $posts[$i]['uti_pseudo'] . "</h3><br>";
-                echo "<h3>" . $posts[$i]['pos_title'] . "</h3><br>";
-                echo "<p>" . $posts[$i]['pos_content'] . "</p><br>";
-                echo '<button class="btn-primary edit-btn">Modifier</button>';
-                echo '<button class="btn-primary delete-btn">Supprimer</button>';
+                echo "<h3>" . htmlspecialchars($posts[$i]['uti_pseudo'], ENT_QUOTES, 'UTF-8') . "</h3><br>";
+                echo "<h3>" . htmlspecialchars($posts[$i]['pos_title'], ENT_QUOTES, 'UTF-8') . "</h3><br>";
+                echo "<p>" . htmlspecialchars($posts[$i]['pos_content'], ENT_QUOTES, 'UTF-8') . "</p><br>";
+
+                // Form for Edit action
+                echo '<form action="" method="POST">';
+                echo '<input type="hidden" name="post_id_modify" value="' . htmlspecialchars($posts[$i]['pos_id'], ENT_QUOTES, 'UTF-8') . '">';
+                echo '<input type="hidden" name="csrf_token" value="' . htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') . '">';
+                echo '<button type="submit" class="btn-primary edit-btn">Modifier</button>';
+                echo '</form>';
+
+                // Form for Delete action
+                echo '<form action="" method="POST">';
+                echo '<input type="hidden" name="post_id_delete" value="' . htmlspecialchars($posts[$i]['pos_id'], ENT_QUOTES, 'UTF-8') . '">';
+                echo '<input type="hidden" name="csrf_token" value="' . htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') . '">';
+                echo '<button type="submit" class="btn-primary delete-btn">Supprimer</button>';
+                echo '</form>';
                 echo "</div>";
             }
-        } else {
-            echo "Aucun utilisateur trouvé.";
         }
         ?>
     </main>

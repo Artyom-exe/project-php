@@ -76,7 +76,7 @@ function index($args = [])
 
         // Préparation de la requête SQL pour récupérer les informations de l'utilisateur
         $requete =
-            "SELECT uti_pseudo, pos_title, pos_content
+            "SELECT uti_pseudo, pos_title, pos_content, pos_id
                     FROM t_utilisateur_uti
                     INNER JOIN p_posts_pos ON uti_id=pos_uti_id
                     WHERE uti_id = :id";
@@ -215,6 +215,39 @@ function sendPost()
     index($args);
 }
 
+function deletePost($id)
+{
+    $args = [];
+    $formMessage = importer_messages('formMessages.json'); // Importation des messages du formulaire
+    // Connexion à la base de données
+    $pdo = connexion_db();
+
+    // Requête SQL pour insérer un nouvel utilisateur dans la base de données
+    $requete =
+        "DELETE FROM p_posts_pos WHERE pos_id = :id";
+
+    try {
+        // Préparation de la requête
+        $stmt = $pdo->prepare($requete);
+
+        // Liaison des valeurs aux paramètres de la requête
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+
+        // Exécution de la requête
+        $stmt->execute();
+
+        // Affichage du message de succès
+        // $args['delete-post'] = $formMessage['delete-post'];
+        echo 'ok';
+    } catch (PDOException $e) {
+        // Affichage de l'erreur en cas d'échec de l'insertion
+        // $args['failed-delete-post'] = $formMessage['failed-delete-post'];
+        echo 'pas ok';
+    }
+    index($args);
+}
+
+
 // Fonction pour traiter la soumission du formulaire
 function insert()
 {
@@ -231,6 +264,9 @@ function insert()
             }
             if (isset($_POST['post-title'])) {
                 sendPost();
+            }
+            if (isset($_POST['post_id_delete'])) {
+                deletePost($_POST['post_id_delete']);
             }
         }
     } else {
