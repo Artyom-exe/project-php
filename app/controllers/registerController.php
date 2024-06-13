@@ -19,7 +19,7 @@ function obtenir_pageInfos()
     return [
         'vue' => 'register',
         'titre' => 'Inscription',
-        'description' => '...'
+        'description' => "Page pour s'enregistrer"
     ];
 }
 
@@ -43,6 +43,18 @@ function insert()
         'successMessageRegister' => '', // Ajoutez une clé pour le message de succès
         'valeursEchappees' => []
     ];
+
+    // Vérification de la fréquence des requêtes
+    $time_limit = 1; // 1 secondes
+    if (isset($_SESSION['last_request_time'])) {
+        $time_since_last_request = time() - $_SESSION['last_request_time'];
+        if ($time_since_last_request < $time_limit) {
+            $args['register-errors'] = "Vous devez attendre $time_limit secondes entre chaque requête.";
+            index($args);
+            return;
+        }
+    }
+    $_SESSION['last_request_time'] = time();
 
     // Récupération de la configuration des champs de formulaire
     $champsConfig = obtenir_ChampsConfigsAuthentification();

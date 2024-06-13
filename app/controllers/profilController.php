@@ -312,6 +312,21 @@ function deletePost($id)
 function insert()
 {
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
+
+        $args = [];
+
+        // Vérification de la fréquence des requêtes
+        $time_limit = 1; // 10 secondes
+        if (isset($_SESSION['last_request_time'])) {
+            $time_since_last_request = time() - $_SESSION['last_request_time'];
+            if ($time_since_last_request < $time_limit) {
+                $args['message-failed-profil'] = "Vous devez attendre $time_limit secondes entre chaque requête.";
+                index($args);
+                return;
+            }
+        }
+        $_SESSION['last_request_time'] = time();
+
         // Vérification du token CSRF
         if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
             $args['errors']['csrf_token'] = "Token CSRF invalide.";

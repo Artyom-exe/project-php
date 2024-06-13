@@ -20,7 +20,7 @@ function obtenir_pageInfos()
     return [
         'vue' => 'connection',
         'titre' => 'Connexion',
-        'description' => '...'
+        'description' => 'Page de connexion'
     ];
 }
 
@@ -60,6 +60,19 @@ function insert()
     }
 
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
+
+        // Vérification de la fréquence des requêtes
+        $time_limit = 1; // 1 secondes
+        if (isset($_SESSION['last_request_time'])) {
+            $time_since_last_request = time() - $_SESSION['last_request_time'];
+            if ($time_since_last_request < $time_limit) {
+                $args['errorMessage'] = "Vous devez attendre $time_limit secondes entre chaque requête.";
+                index($args);
+                return;
+            }
+        }
+        $_SESSION['last_request_time'] = time();
+
         if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
             $args['errors']['csrf_token'] = "Token CSRF invalide.";
         } else {

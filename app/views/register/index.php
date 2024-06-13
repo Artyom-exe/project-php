@@ -12,6 +12,12 @@ $valeursEchappees = $args['valeursEchappees'] ?? '';
         </div>
     <?php endif; ?>
 
+    <?php if (!empty($args['register-errors'])) : ?>
+        <div class="error-message">
+            <?= htmlspecialchars($args['register-errors'], ENT_QUOTES, 'UTF-8') ?>
+        </div>
+    <?php endif; ?>
+
     <form method="POST" action="">
         <fieldset>
             <legend>Inscription</legend>

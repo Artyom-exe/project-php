@@ -18,7 +18,7 @@ function obtenir_pageInfos()
     return [
         'vue' => 'contact',
         'titre' => 'Contact',
-        'description' => '...'
+        'description' => 'Page de contact'
     ];
 }
 

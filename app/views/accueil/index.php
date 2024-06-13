@@ -5,6 +5,7 @@ require_once dirname(__DIR__, 2) . DS . 'controllers' . DS . 'accueilController.
 
 <div class="container">
     <main>
+        <p>Bienvenue sur <strong>Project-PHP</strong>, votre nouvelle plateforme dédiée aux passionnés de développement web et PHP! Rejoignez notre communauté dynamique en <strong>créant un compte dès aujourd'hui</strong>. Partagez vos idées, projets, et astuces en <strong>postant directement dans le flux</strong>. Ensemble, faisons grandir nos compétences et notre réseau. <strong>Inscrivez-vous maintenant</strong> et commencez à contribuer!</p>
         <?php
         if (isset($args['posts'])) {
             $posts = $args['posts'];

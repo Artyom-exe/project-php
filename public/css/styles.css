@@ -79,6 +79,18 @@ main {
     min-height: 80vh;
 }
 
+/* Style pour le paragraphe accueil */
+main > p {
+    font-size: 1.125rem;
+    line-height: 1.6;
+    color: #343a40;
+    margin-bottom: 1.5rem;
+    width: 40%;
+    text-align: justify;
+    border-bottom: rgb(201, 201, 201) solid 1px;
+    margin: 100px;
+}
+
 /* Styles pour les posts dans l'accueil */
 .post-card {
     background-color: #FFF;
@@ -96,7 +108,7 @@ main {
 }
 
 .post-card:nth-child(1) {
-    margin-top: 50px;
+    margin-top: 100px;
 }
 
 .post-card .post-header {
@@ -556,6 +568,15 @@ footer p {
         font-size: 1.2rem;
     }
 
+    .post-card {
+        width: 80%;
+        margin-bottom: 50px;
+    }
+
+    main>p {
+        width: 80%;
+    }
+
     form fieldset {
         width: 90%;
         min-width: 60%;
@@ -601,6 +622,10 @@ footer p {
 
     nav a {
         font-size: 1rem;
+    }
+
+    main > p {
+        width: 90%;
     }
 
     .post-card {
