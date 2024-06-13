@@ -9,7 +9,7 @@ function obtenir_pageInfos()
     return [
         'vue' => 'accueil',
         'titre' => 'Accueil',
-        'description' => '...'
+        'description' => 'Accueil du site'
     ];
 }
 

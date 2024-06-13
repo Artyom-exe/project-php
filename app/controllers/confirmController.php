@@ -18,7 +18,7 @@ function obtenir_pageInfos()
     return [
         'vue' => 'confirm',
         'titre' => 'Confirmation',
-        'description' => '...'
+        'description' => 'Page de confirmation d\'inscription'
     ];
 }
 

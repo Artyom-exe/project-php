@@ -19,7 +19,7 @@ function obtenir_pageInfos()
     return [
         'vue' => 'register',
         'titre' => 'Inscription',
-        'description' => "Page pour s'enregistrer"
+        'description' => 'Page pour s\'enregistrer'
     ];
 }
 
