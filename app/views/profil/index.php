@@ -8,7 +8,7 @@ $valeursEchappees = $args['valeursEchappees'] ?? '';
 ?>
 <div class="container">
 
-    <?php if ((!empty($args['errors']['maj-failed-email']))) : ?>
+    <?php if ((!empty($args['errors']))) : ?>
         <div class="error-message">
             <?= htmlspecialchars($args['errors']['maj-failed-email'], ENT_QUOTES, 'UTF-8') ?>
         </div>

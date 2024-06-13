@@ -1,5 +1,5 @@
 <?php
-require_once dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'init.php';
+require_once dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'profilGestion.php';
 require_once dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'dataBaseFunctions.php';
 require_once dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'formGestion.php';
 require_once dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'authentificationGestion.php';
@@ -7,6 +7,8 @@ require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPAR
 require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'resetMdpModel.php';
 require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'postsModel.php';
 require_once dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'messagesGestion.php';
+
+GestionSession();
 
 if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
@@ -300,25 +302,38 @@ function deletePost($id)
 // Fonction pour traiter la soumission du formulaire
 function insert()
 {
+    // Délai entre les requêtes en secondes
+    $requestDelay = 5;
+
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
         // Vérification du token CSRF
         if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
             $args['errors']['csrf_token'] = "Token CSRF invalide.";
         } else {
-            if (isset($_POST['email-reset'])) {
-                updateEmail();
+            $currentTime = time();
+            if (!isset($_SESSION['last_request_time'])) {
+                $_SESSION['last_request_time'] = 0;
             }
-            if (isset($_POST['password-reset'])) {
-                updatePassword();
-            }
-            if (isset($_POST['post-title'])) {
-                sendPost();
-            }
-            if (isset($_POST['post_id_delete'])) {
-                deletePost($_POST['post_id_delete']);
-            }
-            if (isset($_POST['post_id_modify'])) {
-                modifyPost($_POST['post_id_modify']);
+
+            if ($currentTime - $_SESSION['last_request_time'] < $requestDelay) {
+                $args['errors']['request_rate'] = "Veuillez attendre avant de soumettre une nouvelle requête.";
+            } else {
+                if (isset($_POST['email-reset'])) {
+                    updateEmail();
+                }
+                if (isset($_POST['password-reset'])) {
+                    updatePassword();
+                }
+                if (isset($_POST['post-title'])) {
+                    sendPost();
+                }
+                if (isset($_POST['post_id_delete'])) {
+                    deletePost($_POST['post_id_delete']);
+                }
+                if (isset($_POST['post_id_modify'])) {
+                    modifyPost($_POST['post_id_modify']);
+                }
+                $_SESSION['last_request_time'] = $currentTime; // Mettre à jour le temps de la dernière requête
             }
         }
     } else {
