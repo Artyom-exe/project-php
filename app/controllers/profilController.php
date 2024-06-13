@@ -139,6 +139,8 @@ function updateEmail()
         // Rediriger vers la page de confirmation
         header("Location: /confirm-email-mdp");
         exit();
+    } else {
+        $args['message-failed-profil'] = $formMessage['post-not-modify'];
     }
 
     // Retour à la page de profil en cas d'erreur
@@ -162,6 +164,8 @@ function updatePassword()
         // Rediriger vers la page de confirmation
         header("Location: /confirm-email-mdp");
         exit();
+    } else {
+        $args['message-failed-profil'] = $formMessage['post-not-modify'];
     }
 
     // Retour à la page de profil en cas d'erreur
@@ -209,8 +213,10 @@ function sendPost()
             $args['valeursEchappees'] = [];
         } catch (PDOException $e) {
             // Affichage de l'erreur en cas d'échec de l'insertion
-            $args['errors']['message-failed-profil'] = $formMessage['post-not-posted'];
+            $args['message-failed-profil'] = $formMessage['post-not-posted'];
         }
+    } else {
+        $args['message-failed-profil'] = $formMessage['post-not-modify'];
     }
 
 
@@ -259,10 +265,11 @@ function modifyPost($id)
             $args['valeursEchappees'] = [];
         } catch (PDOException $e) {
             // Affichage de l'erreur en cas d'échec de l'insertion
-            $args['errors']['message-failed-profil'] = $formMessage['post-not-modify'];
+            $args['message-failed-profil'] = $formMessage['post-not-modify'];
         }
     } else {
         $args['errors']['post_id'] = $id;
+        $args['message-failed-profil'] = $formMessage['post-not-modify'];
     }
 
 
@@ -295,7 +302,7 @@ function deletePost($id)
         $args['message-success-profil'] = $formMessage['delete-post'];
     } catch (PDOException $e) {
         // Affichage de l'erreur en cas d'échec de l'insertion
-        $args['errors']['message-failed-profil'] = $formMessage['failed-delete-post'];
+        $args['message-failed-profil'] = $formMessage['failed-delete-post'];
     }
     index($args);
 }

@@ -8,21 +8,9 @@ $valeursEchappees = $args['valeursEchappees'] ?? '';
 ?>
 <div class="container">
 
-    <?php if ((!empty($args['errors']['maj-failed-email']))) : ?>
-        <div class="error-message">
-            <?= htmlspecialchars($args['errors']['maj-failed-email'], ENT_QUOTES, 'UTF-8') ?>
-        </div>
-    <?php endif; ?>
-
     <?php if (!empty($args['message-failed-profil'])) : ?>
         <div class="error-message">
             <?= htmlspecialchars($args['message-failed-profil'], ENT_QUOTES, 'UTF-8') ?>
-        </div>
-    <?php endif; ?>
-
-    <?php if ((!empty($_SESSION['success']))) : ?>
-        <div class="success-message">
-            <?= htmlspecialchars($_SESSION['success'], ENT_QUOTES, 'UTF-8') ?>
         </div>
     <?php endif; ?>
 
@@ -32,6 +20,11 @@ $valeursEchappees = $args['valeursEchappees'] ?? '';
         </div>
     <?php endif; ?>
 
+    <?php if ((!empty($_SESSION['success']))) : ?>
+        <div class="success-message">
+            <?= htmlspecialchars($_SESSION['success'], ENT_QUOTES, 'UTF-8') ?>
+        </div>
+    <?php endif; ?>
 
     <main>
         <!-- Formulaire de réinitialisation de l'email -->
@@ -120,6 +113,7 @@ $valeursEchappees = $args['valeursEchappees'] ?? '';
         <!-- Posts de l'utilisateur -->
 
         <?php
+
         if (isset($args['posts-utilisateur'])) {
             $posts = $args['posts-utilisateur'];
             $posts = array_reverse($posts); // Inverser l'ordre des posts
