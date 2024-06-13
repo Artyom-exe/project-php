@@ -101,6 +101,7 @@ main > p {
     padding: 1rem;
     transition: box-shadow 0.3s ease-in-out;
     min-width: 40%;
+    max-width: 40%;
 }
 
 .post-card:hover {

@@ -22,6 +22,5 @@
             <?= nav_item('/contact', 'Contact'); ?>
             <?= nav_item('/connexion', 'Connexion'); ?>
             <?= nav_item('/profil', 'Mon profil'); ?>
-            <?= nav_item('/confirm', 'Confirmer'); ?>
         </ul>
     </nav>
