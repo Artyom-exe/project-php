@@ -8,7 +8,7 @@ $valeursEchappees = $args['valeursEchappees'] ?? '';
 ?>
 <div class="container">
 
-    <?php if ((!empty($args['errors']))) : ?>
+    <?php if ((!empty($args['errors']['maj-failed-email']))) : ?>
         <div class="error-message">
             <?= htmlspecialchars($args['errors']['maj-failed-email'], ENT_QUOTES, 'UTF-8') ?>
         </div>
@@ -124,18 +124,30 @@ $valeursEchappees = $args['valeursEchappees'] ?? '';
             $posts = $args['posts-utilisateur'];
             $posts = array_reverse($posts); // Inverser l'ordre des posts
             for ($i = 0; $i < count($posts); $i++) {
+
                 echo "<div class='form-add-post'>";
                 echo "<form action='/profil' method='POST'>"; // Formulaires principaux ouverts ici
                 echo "<h3>" . htmlspecialchars($posts[$i]['uti_pseudo'], ENT_QUOTES, 'UTF-8') . "</h3><br>";
+
                 echo "<div class='form-group'>";
-                echo "<label for='post-title-modif'>Titre du Post</label>";
-                echo "<input type='text' class='form-control' id='post-title-modif' name='post-title-modif' value='" . htmlspecialchars($posts[$i]['pos_title'], ENT_QUOTES, 'UTF-8') . "'>";
+                echo "<label for='post-title-modify'>Titre du Post</label>";
+                echo "<input type='text' class='form-control' id='post-title-modify' name='post-title-modify' value='" . htmlspecialchars($posts[$i]['pos_title'], ENT_QUOTES, 'UTF-8') . "'>";
                 echo "</div>";
+
+                // Afficher le message d'erreur uniquement pour le post en cours de modification
+                if (!empty($errors['post-title-modify']) && intval($posts[$i]['pos_id']) === intval($errors['post_id'])) {
+                    echo "<div class='error-value'>" . htmlspecialchars($errors['post-title-modify'], ENT_QUOTES, 'UTF-8') . "</div>";
+                }
 
                 echo "<div class='form-group'>";
                 echo "<label for='post-content-modif'>Contenu du Post</label>";
-                echo "<textarea class='form-control' id='post-content-modif' name='post-content-modif'>" . htmlspecialchars($posts[$i]['pos_content'], ENT_QUOTES, 'UTF-8') . "</textarea>";
+                echo "<textarea class='form-control' id='post-content-modify' name='post-content-modify'>" . htmlspecialchars($posts[$i]['pos_content'], ENT_QUOTES, 'UTF-8') . "</textarea>";
                 echo "</div>";
+
+                // Afficher le message d'erreur uniquement pour le post en cours de modification
+                if (!empty($errors['post-content-modify']) && intval($posts[$i]['pos_id']) === intval($errors['post_id'])) {
+                    echo "<div class='error-value'>" . htmlspecialchars($errors['post-content-modify'], ENT_QUOTES, 'UTF-8') . "</div>";
+                }
 
                 // Form for Edit action
                 echo '<input type="hidden" name="post_id_modify" value="' . htmlspecialchars($posts[$i]['pos_id'], ENT_QUOTES, 'UTF-8') . '">';

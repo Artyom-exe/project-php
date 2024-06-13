@@ -4,6 +4,7 @@ require_once dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPA
 require_once dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'formGestion.php';
 require_once dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'authentificationGestion.php';
 require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'resetEmailModel.php';
+require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'postModifyModel.php';
 require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'resetMdpModel.php';
 require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'postsModel.php';
 require_once dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'messagesGestion.php';
@@ -208,7 +209,7 @@ function sendPost()
             $args['valeursEchappees'] = [];
         } catch (PDOException $e) {
             // Affichage de l'erreur en cas d'échec de l'insertion
-            $args['message-failed-profil'] = $formMessage['post-not-posted'];
+            $args['errors']['message-failed-profil'] = $formMessage['post-not-posted'];
         }
     }
 
@@ -219,49 +220,50 @@ function sendPost()
 
 function modifyPost($id)
 {
-    // $args = [];
-    // $champsConfig = obtenir_ChampsConfigsPost(); // Configuration des champs de formulaire
+    $args = [];
+    $champsConfig = obtenir_ChampsConfigsModifyPost(); // Configuration des champs de formulaire
 
     $formMessage = importer_messages('formMessages.json'); // Importation des messages du formulaire
 
     // // Validation du formulaire
-    // $args = gestion_formulaire($formMessage, $champsConfig);
-
+    $args = gestion_formulaire($formMessage, $champsConfig);
     // // Si le formulaire est valide, procéder à la redirection pour la confirmation par email
-    // if (empty($args['errors'])) {
+    if (empty($args['errors'])) {
 
-    // Connexion à la base de données
-    $pdo = connexion_db();
+        // Connexion à la base de données
+        $pdo = connexion_db();
 
-    // Récupération des valeurs des champs
-    $title = $_POST['post-title-modif'];
-    $content = $_POST['post-content-modif'];
+        // Récupération des valeurs des champs
+        $title = $_POST['post-title-modify'];
+        $content = $_POST['post-content-modify'];
 
-    // Requête SQL pour remplacer le contenu du post
-    $requete = "UPDATE p_posts_pos SET pos_title = :title, pos_content = :content WHERE pos_id = :id";
+        // Requête SQL pour remplacer le contenu du post
+        $requete = "UPDATE p_posts_pos SET pos_title = :title, pos_content = :content WHERE pos_id = :id";
 
-    try {
-        // Préparation de la requête
-        $stmt = $pdo->prepare($requete);
+        try {
+            // Préparation de la requête
+            $stmt = $pdo->prepare($requete);
 
-        // Liaison des valeurs aux paramètres de la requête
-        $stmt->bindParam(':title', $title);
-        $stmt->bindParam(':content', $content);
-        $stmt->bindParam(':id', $id);
+            // Liaison des valeurs aux paramètres de la requête
+            $stmt->bindParam(':title', $title);
+            $stmt->bindParam(':content', $content);
+            $stmt->bindParam(':id', $id);
 
-        // Exécution de la requête
-        $stmt->execute();
+            // Exécution de la requête
+            $stmt->execute();
 
-        // Affichage du message de succès
-        $args['message-success-profil'] = $formMessage['post-modify'];
+            // Affichage du message de succès
+            $args['message-success-profil'] = $formMessage['post-modify'];
 
-        // Réinitialisation des valeurs échappées
-        $args['valeursEchappees'] = [];
-    } catch (PDOException $e) {
-        // Affichage de l'erreur en cas d'échec de l'insertion
-        $args['message-failed-profil'] = $formMessage['post-not-modify'];
+            // Réinitialisation des valeurs échappées
+            $args['valeursEchappees'] = [];
+        } catch (PDOException $e) {
+            // Affichage de l'erreur en cas d'échec de l'insertion
+            $args['errors']['message-failed-profil'] = $formMessage['post-not-modify'];
+        }
+    } else {
+        $args['errors']['post_id'] = $id;
     }
-    // }
 
 
     // Retour à la page de profil en cas d'erreur
@@ -293,7 +295,7 @@ function deletePost($id)
         $args['message-success-profil'] = $formMessage['delete-post'];
     } catch (PDOException $e) {
         // Affichage de l'erreur en cas d'échec de l'insertion
-        $args['message-failed-profil'] = $formMessage['failed-delete-post'];
+        $args['errors']['message-failed-profil'] = $formMessage['failed-delete-post'];
     }
     index($args);
 }
@@ -302,38 +304,25 @@ function deletePost($id)
 // Fonction pour traiter la soumission du formulaire
 function insert()
 {
-    // Délai entre les requêtes en secondes
-    $requestDelay = 5;
-
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
         // Vérification du token CSRF
         if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
             $args['errors']['csrf_token'] = "Token CSRF invalide.";
         } else {
-            $currentTime = time();
-            if (!isset($_SESSION['last_request_time'])) {
-                $_SESSION['last_request_time'] = 0;
+            if (isset($_POST['email-reset'])) {
+                updateEmail();
             }
-
-            if ($currentTime - $_SESSION['last_request_time'] < $requestDelay) {
-                $args['errors']['request_rate'] = "Veuillez attendre avant de soumettre une nouvelle requête.";
-            } else {
-                if (isset($_POST['email-reset'])) {
-                    updateEmail();
-                }
-                if (isset($_POST['password-reset'])) {
-                    updatePassword();
-                }
-                if (isset($_POST['post-title'])) {
-                    sendPost();
-                }
-                if (isset($_POST['post_id_delete'])) {
-                    deletePost($_POST['post_id_delete']);
-                }
-                if (isset($_POST['post_id_modify'])) {
-                    modifyPost($_POST['post_id_modify']);
-                }
-                $_SESSION['last_request_time'] = $currentTime; // Mettre à jour le temps de la dernière requête
+            if (isset($_POST['password-reset'])) {
+                updatePassword();
+            }
+            if (isset($_POST['post-title'])) {
+                sendPost();
+            }
+            if (isset($_POST['post_id_delete'])) {
+                deletePost($_POST['post_id_delete']);
+            }
+            if (isset($_POST['post_id_modify'])) {
+                modifyPost($_POST['post_id_modify']);
             }
         }
     } else {
