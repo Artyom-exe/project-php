@@ -18,7 +18,7 @@ $valeursEchappees = $args['valeursEchappees'] ?? '';
 
     <form method="POST" action="">
         <fieldset>
-            <legend>Contact</legend>
+            <h1>Contact</h1>
             <p>
                 <label for="lastname">Nom&nbsp;:</label>
                 <input type="text" name="user_lastname" value="<?= htmlspecialchars($valeursEchappees['user_lastname'] ?? "", ENT_QUOTES, 'UTF-8') ?>" />
@@ -49,7 +49,7 @@ $valeursEchappees = $args['valeursEchappees'] ?? '';
             <?php endif; ?>
             <p>
                 <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>">
-                <button type="submit">Envoyer</button>
+                <button type="submit" class="logout-link">Envoyer</button>
             </p>
         </fieldset>
     </form>

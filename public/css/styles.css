@@ -203,7 +203,7 @@ form p textarea {
     resize: none;
 }
 
-form p button[type='submit'] {
+/* form p button[type='submit'] {
     border: none;
     border-radius: 0.5rem;
     padding: 0.5rem 1rem;
@@ -217,7 +217,7 @@ form p button[type='submit'] {
 
 form p button[type='submit']:hover {
     background-color: #E67E22;
-}
+} */
 
 /* Styles pour les messages */
 .content-message,
@@ -269,6 +269,14 @@ form p button[type='submit']:hover {
     order: 1;
 }
 
+h1 {
+    margin-top: 0;
+    margin-bottom: 1.25rem;
+    font-size: 2rem;
+    color: #323E6E;
+
+}
+
 .content-profil h2 {
     margin-top: 0;
     margin-bottom: 1.25rem;
@@ -282,7 +290,7 @@ form p button[type='submit']:hover {
     color: #495057;
 }
 
-.content-profil .logout-link {
+.logout-link {
     color: #ff7f50;
     text-decoration: none;
     display: inline-block;
@@ -295,7 +303,7 @@ form p button[type='submit']:hover {
     transition: background-color 0.3s ease;
 }
 
-.content-profil .logout-link:hover {
+.logout-link:hover {
     background-color: #ff7f50;
     color: #fff;
     text-decoration: none;
