@@ -61,6 +61,8 @@ function index($args = [])
 
 function insert()
 {
+    // Initialisation du tableau d'arguments avec des valeurs par défaut
+
     $args = [
         'errors' => [],
         'errorMessage' => '',

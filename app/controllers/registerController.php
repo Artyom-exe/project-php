@@ -37,10 +37,11 @@ function index($args = [])
 
 function insert()
 {
+    // Initialisation du tableau d'arguments avec des valeurs par défaut
 
     $args = [
         'errors' => [],
-        'successMessageRegister' => '', // Ajoutez une clé pour le message de succès
+        'successMessageRegister' => '',
         'valeursEchappees' => []
     ];
 

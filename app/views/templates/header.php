@@ -15,9 +15,11 @@
 <body>
     <nav>
         <ul>
+            <!-- logo du site -->
             <li>Project <span>PHP</span></li>
         </ul>
         <ul>
+            <!-- Utilisation de la fonction nav_item pour générer les liens de navigation -->
             <?= nav_item('/', 'Accueil'); ?>
             <?= nav_item('/contact', 'Contact'); ?>
             <?= nav_item('/connexion', 'Connexion'); ?>

@@ -6,6 +6,8 @@ $valeursEchappees = $args['valeursEchappees'] ?? '';
 ?>
 <div class="container">
 
+    <!-- affichage des messages d'erreurs ou de succès -->
+
     <?php if (!empty($args['errorMessage'])) : [] ?>
         <div class="error-message">
             <?= htmlspecialchars($args['errorMessage'], ENT_QUOTES, 'UTF-8') ?>

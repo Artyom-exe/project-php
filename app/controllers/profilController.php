@@ -11,6 +11,7 @@ require_once dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPA
 
 GestionSession();
 
+// Initialisation du token CSRF s'il n'existe pas déjà
 if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
@@ -30,8 +31,8 @@ function index($args = [])
 {
     // Vérification de la session et de la connexion de l'utilisateur
     if (!isset($_SESSION['id']) || !est_connecte($_SESSION['id'])) {
-        header("Location: /connexion"); // Redirection vers la page de connexion si l'utilisateur n'est pas connecté
-        exit(); // Arrêt du script pour éviter toute exécution supplémentaire
+        header("Location: /connexion");
+        exit();
     }
 
     try {
@@ -77,7 +78,7 @@ function index($args = [])
         // Connexion à la base de données
         $pdo = connexion_db();
 
-        // Préparation de la requête SQL pour récupérer les informations de l'utilisateur
+        // Préparation de la requête SQL pour récupérer les posts de l'utilisateurs 
         $requete =
             "SELECT uti_pseudo, pos_title, pos_content, pos_id
                     FROM t_utilisateur_uti
@@ -104,7 +105,7 @@ function index($args = [])
         $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         if ($posts) {
-            // Stockage des informations de l'utilisateur dans une variable de session
+            // Stockage des posts dans le tableau d'arguments
             $args['posts-utilisateur'] = $posts;
         } else {
             throw new Exception("Utilisateur non trouvé.");
@@ -125,8 +126,8 @@ function index($args = [])
 function updateEmail()
 {
     $args = [];
-    $champsConfig = obtenir_ChampsConfigsEmailReset(); // Configuration des champs de formulaire
-    $formMessage = importer_messages('formMessages.json'); // Importation des messages du formulaire
+    $champsConfig = obtenir_ChampsConfigsEmailReset();
+    $formMessage = importer_messages('formMessages.json');
 
     // Validation du formulaire
     $args = gestion_formulaire($formMessage, $champsConfig);
@@ -175,23 +176,22 @@ function updatePassword()
 function sendPost()
 {
     $args = [];
-    $champsConfig = obtenir_ChampsConfigsPost(); // Configuration des champs de formulaire
-    $formMessage = importer_messages('formMessages.json'); // Importation des messages du formulaire
+    $champsConfig = obtenir_ChampsConfigsPost();
+    $formMessage = importer_messages('formMessages.json');
 
     // Validation du formulaire
     $args = gestion_formulaire($formMessage, $champsConfig);
 
-    // Si le formulaire est valide, procéder à la redirection pour la confirmation par email
     if (empty($args['errors'])) {
         // Connexion à la base de données
         $pdo = connexion_db();
 
         // Récupération des valeurs des champs
         $title = $args['valeursEchappees']['post-title'];
-        $content = $args['valeursEchappees']['post-content']; // Hashage du mot de passe
-        $id = $_SESSION['utilisateur']['uti_id']; // Hashage du mot de passe
+        $content = $args['valeursEchappees']['post-content'];
+        $id = $_SESSION['utilisateur']['uti_id'];
 
-        // Requête SQL pour insérer un nouvel utilisateur dans la base de données
+        // Requête SQL pour insérer un nouveau post
         $requete = "INSERT INTO p_posts_pos (pos_title, pos_content, pos_uti_id) VALUES (:title, :content, :id)";
 
         try {
@@ -218,8 +218,6 @@ function sendPost()
     } else {
         $args['message-failed-profil'] = $formMessage['post-not-modify'];
     }
-
-
     // Retour à la page de profil en cas d'erreur
     index($args);
 }
@@ -227,13 +225,11 @@ function sendPost()
 function modifyPost($id)
 {
     $args = [];
-    $champsConfig = obtenir_ChampsConfigsModifyPost(); // Configuration des champs de formulaire
+    $champsConfig = obtenir_ChampsConfigsModifyPost();
+    $formMessage = importer_messages('formMessages.json');
 
-    $formMessage = importer_messages('formMessages.json'); // Importation des messages du formulaire
-
-    // // Validation du formulaire
     $args = gestion_formulaire($formMessage, $champsConfig);
-    // // Si le formulaire est valide, procéder à la redirection pour la confirmation par email
+
     if (empty($args['errors'])) {
 
         // Connexion à la base de données
@@ -284,7 +280,7 @@ function deletePost($id)
     // Connexion à la base de données
     $pdo = connexion_db();
 
-    // Requête SQL pour insérer un nouvel utilisateur dans la base de données
+    // Requête SQL pour supprimer le post
     $requete =
         "DELETE FROM p_posts_pos WHERE pos_id = :id";
 
@@ -316,7 +312,7 @@ function insert()
         $args = [];
 
         // Vérification de la fréquence des requêtes
-        $time_limit = 1; // 10 secondes
+        $time_limit = 1; // 1 secondes
         if (isset($_SESSION['last_request_time'])) {
             $time_since_last_request = time() - $_SESSION['last_request_time'];
             if ($time_since_last_request < $time_limit) {

@@ -38,6 +38,8 @@ function index($args = [])
 
 function insert()
 {
+    // Initialisation du tableau d'arguments avec des valeurs par défaut
+
     $args = [
         'errors' => [],
         'errorMessage' => '',
@@ -46,18 +48,6 @@ function insert()
 
     $champsConfig = obtenir_ChampsConfigsAuthentification(false);
     $formMessage = importer_messages('formMessages.json');
-
-    $limiteTemps = 1; // Limite de temps en secondes entre les requêtes
-    $tempsActuel = time();
-
-
-    // Vérifiez si la session a déjà enregistré une requête précédente et le temps écoulé
-    if (isset($_SESSION['dernierAcces']) && ($tempsActuel - $_SESSION['dernierAcces'] < $limiteTemps)) {
-        $tempsRestant = $limiteTemps - ($tempsActuel - $_SESSION['dernierAcces']);
-        $args['errorMessage'] = "Veuillez attendre $tempsRestant secondes avant de refaire une requête.";
-        index($args);
-        return;
-    }
 
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
@@ -73,10 +63,13 @@ function insert()
         }
         $_SESSION['last_request_time'] = time();
 
+        // Vérifier le token CSRF
         if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
             $args['errors']['csrf_token'] = "Token CSRF invalide.";
         } else {
             $args = gestion_formulaire($formMessage, $champsConfig);
+
+            // Authentifie l'utilisateur en vérifiant le pseudo et le mot de passe, initialise la session en conséquence, et redirige selon l'état d'activation du compte.
 
             if (empty($args['errors'])) {
                 try {
@@ -85,12 +78,16 @@ function insert()
                     $pseudo = $_POST['pseudo'];
                     $motDePasse = $_POST['motDePasse'];
 
+                    // Prépare et exécute la requête pour récupérer l'utilisateur par son pseudo
+
                     $requete = "SELECT * FROM t_utilisateur_uti WHERE uti_pseudo = :pseudo";
                     $stmt = $pdo->prepare($requete);
                     $stmt->bindValue(':pseudo', $pseudo, PDO::PARAM_STR);
                     $stmt->execute();
 
                     $utilisateur = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                    // Prépare et exécute la requête pour récupérer l'utilisateur par son pseudo
 
                     if ($utilisateur && password_verify($motDePasse, $utilisateur['uti_motdepasse'])) {
                         $verifierIdentite = [
@@ -102,8 +99,7 @@ function insert()
 
                         $_SESSION['verifierIdentite'] = $verifierIdentite;
 
-                        // Met à jour le temps de la dernière requête réussie
-                        $_SESSION['dernierAcces'] = $tempsActuel;
+                        // Redirige selon l'état d'activation du compte
 
                         if (intval($utilisateur['uti_compte_active']) === 0) {
                             header("location: /confirm");

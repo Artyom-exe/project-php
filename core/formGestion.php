@@ -32,6 +32,8 @@ function gestion_formulaire(array $formMessage, array $champsConfig): array
         }
     }
 
+    // Retourne un tableau contenant les erreurs de validation et les valeurs échappées des champs
+
     return [
         'errors' => $errors,
         'valeursEchappees' => $valeursEchappees

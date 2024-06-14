@@ -1,5 +1,4 @@
 <?php
-// Inclure le fichier de configuration de la base de données
 require_once (__DIR__) . DS . 'config_helper.php';
 
 // Fonction pour établir une connexion à la base de données

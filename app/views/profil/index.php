@@ -8,6 +8,8 @@ $valeursEchappees = $args['valeursEchappees'] ?? '';
 ?>
 <div class="container">
 
+    <!-- affichage des messages d'erreurs ou de succès -->
+
     <?php if (!empty($args['message-failed-profil'])) : ?>
         <div class="error-message">
             <?= htmlspecialchars($args['message-failed-profil'], ENT_QUOTES, 'UTF-8') ?>

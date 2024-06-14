@@ -1,4 +1,6 @@
 <?php
+// Charge et retourne la configuration une seule fois à partir du fichier config.php situé dans le répertoire parent.
+
 function getConfig()
 {
     $config = null;

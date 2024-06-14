@@ -30,18 +30,21 @@ function index($args = [])
 
 function insert()
 {
+    // Initialisation du tableau d'arguments avec des valeurs par défaut
+
     $args = [
         'errors' => [],
-        'successMessageContact' => '', // Ajoutez une clé pour le message de succès
+        'successMessageContact' => '',
         'valeursEchappees' => []
     ];
+
     // Configuration des champs de formulaire et messages
     $champsConfig = obtenir_ChampsConfigsContact();
     $formMessage = importer_messages('formMessages.json');
 
     // Vérification de la méthode de requête POST
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
-        // Vérification du token CSRF
+
         // Vérification du token CSRF
         if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
             $ars['errors']['csrf_token'] = "Token CSRF invalide.";

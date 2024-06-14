@@ -6,11 +6,15 @@ $valeursEchappees = $args['valeursEchappees'] ?? '';
 ?>
 <div class="container">
 
+    <!-- affichage des messages d'erreurs -->
+
     <?php if (!empty($args['errorMessage'])) : ?>
         <div class="error-message">
             <?= htmlspecialchars($args['errorMessage'], ENT_QUOTES, 'UTF-8') ?>
         </div>
     <?php endif; ?>
+
+    <!-- formulaire de connexion -->
 
     <form method="POST" action="">
         <fieldset>

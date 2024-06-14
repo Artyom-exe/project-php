@@ -6,11 +6,15 @@ $valeursEchappees = $args['valeursEchappees'] ?? '';
 ?>
 <div class="container">
 
+    <!-- affichage des messages d'erreurs ou de succès -->
+
     <?php if (!empty($args['succesMessageContact'])) : ?>
         <div class="success-message">
             <?= htmlspecialchars($args['succesMessageContact'], ENT_QUOTES, 'UTF-8') ?>
         </div>
     <?php endif; ?>
+
+    <!-- formulaire de contact -->
 
     <form method="POST" action="">
         <fieldset>

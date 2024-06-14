@@ -19,7 +19,7 @@ function index()
         // Connexion à la base de données
         $pdo = connexion_db();
 
-        // Préparation de la requête SQL pour récupérer les informations de l'utilisateur
+        // Préparation de la requête SQL pour récupérer les posts des utilisateurs
         $requete = "SELECT uti_pseudo, pos_title, pos_content
                     FROM t_utilisateur_uti
                     INNER JOIN p_posts_pos ON uti_id=pos_uti_id";
@@ -29,7 +29,7 @@ function index()
         // Exécution de la requête
         $stmt->execute();
 
-        // Récupération des informations de l'utilisateur
+        // Récupération des informations des posts utilisateurs
         $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         if ($posts) {

@@ -67,6 +67,8 @@ function index($args = [])
 
 function insert()
 {
+    // Initialisation du tableau d'arguments avec des valeurs par défaut
+
     $args = [
         'errors' => [],
         'errorMessage' => '',
@@ -106,6 +108,8 @@ function insert()
             // Vérifier le code d'activation s'il est soumis
             if (isset($_POST['form_code'])) {
                 $args = gestion_formulaire($formMessage, $champsConfig['form_code']);
+
+                // Active le compte utilisateur en base de données si le code de vérification est correct et qu'il n'y a pas d'erreurs.
 
                 if (empty($args['errors'])) {
                     if (isset($args['valeursEchappees']['verification_code']) && intval($args['valeursEchappees']['verification_code']) === $_SESSION['code']) {
