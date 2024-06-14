@@ -18,11 +18,20 @@
             <!-- logo du site -->
             <li class="logo"><a href='/'>Project <span>PHP</span></a></li>
         </ul>
-        <ul>
-            <!-- Utilisation de la fonction nav_item pour générer les liens de navigation -->
-            <?= nav_item('/', 'Accueil'); ?>
-            <?= nav_item('/contact', 'Contact'); ?>
-            <?= nav_item('/connexion', 'Connexion'); ?>
-            <?= nav_item('/profil', 'Mon profil'); ?>
-        </ul>
+        <?php if (!isset($_SESSION['utilisateur'])) {
+            echo "<ul>";
+            echo nav_item('/', 'Home');
+            echo nav_item('/contact', 'Contact');
+            echo nav_item('/connexion', 'Connexion');
+            echo nav_item('/inscription', 'S\'enregistrer');
+            echo "</ul>";
+        } else {
+            echo "<ul>";
+            echo nav_item('/', 'Home');
+            echo nav_item('/contact', 'Contact');
+            echo nav_item('/profil', 'Mon profil');
+            echo nav_item('/logout', 'Déconnexion');
+            echo "</ul>";
+        }
+        ?>
     </nav>

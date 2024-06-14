@@ -48,10 +48,11 @@ nav ul li.logo a {
     display: inline-block;
     margin-right: 1rem;
     font-size: 1.1em;
+    background-color: #FFF;
 }
 
-nav ul li.logo:hover a {
-    border: none;
+nav ul:nth-child(1) {
+    background-color: none;
 }
 
 nav ul:first-child li:first-child {
@@ -70,15 +71,38 @@ nav ul:first-child li:first-child span {
 }
 
 nav a {
+    color: #323E6E;
     text-decoration: none;
-    font-size: 1.5em;
-    color: black;
-    padding: 0.5rem;
+    padding: 0.5rem 1rem;
+    font-size: 1.2em;
+    border-radius: 0.25rem;
+    background-color: #f8f9fa;
+    transition: background-color 0.3s ease;
 }
 
-nav a:hover,
-nav a:focus {
-    border-bottom: solid 3px #323E6E;
+nav ul:nth-child(2) li:nth-last-child(1) a {
+    color: #ff7f50;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    font-weight: bold;
+    border-radius: 0.25rem;
+    background-color: #f8f9fa;
+    transition: background-color 0.3s ease;
+        }
+    
+nav ul:nth-child(2) li:nth-last-child(1) a:hover {
+    background-color: #ff7f50;
+    color: #fff;
+    text-decoration: none;
+    border-bottom: none;
+}
+
+nav ul:nth-child(2) a:hover,
+nav ul:nth-child(2) a:focus {
+    background-color: #323E6E;
+    color: #fff;
+    text-decoration: none;
+    border-bottom: none;
 }
 
 /* Styles pour le contenu principal */
@@ -566,6 +590,7 @@ footer p {
     nav ul li {
         margin-right: 0;
         padding: 0.5rem 0;
+        margin-bottom: 10px;
     }
 
     nav a {
@@ -573,7 +598,8 @@ footer p {
     }
 
     .post-card {
-        width: 80%;
+        min-width: 80%;
+        max-width: 80%;
         margin-bottom: 50px;
     }
 
@@ -622,6 +648,7 @@ footer p {
     nav ul li {
         margin-right: 0;
         padding: 0.5rem 0;
+        margin-bottom: 10px;
     }
 
     nav a {
@@ -633,7 +660,8 @@ footer p {
     }
 
     .post-card {
-        width: 100%;
+        min-width: 100%;
+        max-width: 100%;
         margin-bottom: 50px;
     }
 

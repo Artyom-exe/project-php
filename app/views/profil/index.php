@@ -25,6 +25,7 @@ $valeursEchappees = $args['valeursEchappees'] ?? '';
     <?php if ((!empty($_SESSION['success']))) : ?>
         <div class="success-message">
             <?= htmlspecialchars($_SESSION['success'], ENT_QUOTES, 'UTF-8') ?>
+            <?php unset($_SESSION['success']); ?>
         </div>
     <?php endif; ?>
 
