@@ -11,6 +11,11 @@ require_once dirname(__DIR__, 2) . DS . 'controllers' . DS . 'accueilController.
             $posts = $args['posts'];
             $posts = array_reverse($posts); // Inverser l'ordre des posts
             for ($i = 0; $i < count($posts); $i++) {
+
+                // Décoder les entités HTML pour chaque champ de contenu
+                $posts[$i]['pos_title'] = html_entity_decode($posts[$i]['pos_title']);
+                $posts[$i]['pos_content'] = html_entity_decode($posts[$i]['pos_content']);
+
                 echo "<div class='post-card'>";
                 echo "<div class='post-header'>";
                 echo "<h3>" . htmlspecialchars($posts[$i]['uti_pseudo']) . "</h3>";

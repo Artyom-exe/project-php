@@ -119,6 +119,10 @@ $valeursEchappees = $args['valeursEchappees'] ?? '';
             $posts = array_reverse($posts); // Inverser l'ordre des posts
             for ($i = 0; $i < count($posts); $i++) {
 
+                // Décoder les entités HTML pour chaque champ de contenu
+                $posts[$i]['pos_title'] = html_entity_decode($posts[$i]['pos_title']);
+                $posts[$i]['pos_content'] = html_entity_decode($posts[$i]['pos_content']);
+
                 echo "<div class='form-add-post'>";
                 echo "<form action='/profil' method='POST'>"; // Formulaires principaux ouverts ici
                 echo "<h3>" . htmlspecialchars($posts[$i]['uti_pseudo'], ENT_QUOTES, 'UTF-8') . "</h3><br>";
