@@ -43,6 +43,17 @@ nav ul li {
     font-size: 0.9em;
 }
 
+
+nav ul li.logo a {
+    display: inline-block;
+    margin-right: 1rem;
+    font-size: 1.1em;
+}
+
+nav ul li.logo:hover a {
+    border: none;
+}
+
 nav ul:first-child li:first-child {
     color: black;
     font-size: 2em;

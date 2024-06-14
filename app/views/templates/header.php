@@ -16,7 +16,7 @@
     <nav>
         <ul>
             <!-- logo du site -->
-            <li>Project <span>PHP</span></li>
+            <li class="logo"><a href='/'>Project <span>PHP</span></a></li>
         </ul>
         <ul>
             <!-- Utilisation de la fonction nav_item pour générer les liens de navigation -->
