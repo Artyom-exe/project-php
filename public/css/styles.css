@@ -203,22 +203,6 @@ form p textarea {
     resize: none;
 }
 
-/* form p button[type='submit'] {
-    border: none;
-    border-radius: 0.5rem;
-    padding: 0.5rem 1rem;
-    background-color: #F8883C;
-    font-size: 1rem;
-    font-weight: bold;
-    color: white;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-form p button[type='submit']:hover {
-    background-color: #E67E22;
-} */
-
 /* Styles pour les messages */
 .content-message,
 .error-message,
